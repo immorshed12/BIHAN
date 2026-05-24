@@ -215,7 +215,7 @@ export async function GET(
       });
 
       const singlePagePdfBytes = await destDoc.save();
-      return new NextResponse(singlePagePdfBytes, {
+      return new NextResponse(Buffer.from(singlePagePdfBytes), {
         status: 200,
         headers: {
           'Content-Type': 'application/pdf',
@@ -309,7 +309,7 @@ export async function GET(
     const singlePagePdfBytes = await destDoc.save();
 
     // 6. Return response with application/pdf header
-    return new NextResponse(singlePagePdfBytes, {
+    return new NextResponse(Buffer.from(singlePagePdfBytes), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',

@@ -72,7 +72,7 @@ export async function GET(
       page.drawText(watermarkText, { x: 50, y: 50, size: 8, font: helveticaFont, color: rgb(0.6, 0.6, 0.6) });
       
       const finalBytes = await destDoc.save();
-      return new NextResponse(finalBytes, {
+      return new NextResponse(Buffer.from(finalBytes), {
         status: 200,
         headers: {
           'Content-Type': 'application/pdf',
