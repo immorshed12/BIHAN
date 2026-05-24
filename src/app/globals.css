@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #3b2a60; /* Luxury Velvet Main Body */
+  --foreground: #f8fafc;
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  font-family: 'Plus Jakarta Sans', 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom premium ambient lighting backgrounds (Luxury Lavender glowing fields) */
+.bg-radial-glow {
+  background: radial-gradient(circle 800px at 50% -250px, rgba(211, 197, 246, 0.15), transparent 80%);
+}
+
+.bg-radial-purple-glow {
+  background: radial-gradient(circle 600px at 100% 400px, rgba(211, 197, 246, 0.08), transparent 80%);
+}
+
+/* Glassmorphism panels */
+.glass-panel {
+  background: rgba(25, 18, 41, 0.7); /* Velvet dark container */
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.45);
+}
+
+.glass-panel-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-hover:hover {
+  background: rgba(35, 26, 58, 0.85);
+  border-color: rgba(211, 197, 246, 0.35); /* Lavender border */
+  box-shadow: 0 16px 48px 0 rgba(211, 197, 246, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Glassy input controls */
+.glass-input {
+  background: rgba(25, 18, 41, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.glass-input:focus {
+  border-color: rgba(211, 197, 246, 0.5); /* Lavender focus */
+  box-shadow: 0 0 0 2px rgba(211, 197, 246, 0.15);
+  outline: none;
+}
+
+/* Custom premium scrollbar (Velvet and Lavender styling) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2a1d47;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #735fa3;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d3c5f6; /* Lavender scrollbar highlight */
+}
+
+/* Text selections */
+::selection {
+  background-color: rgba(211, 197, 246, 0.3);
+  color: #fff;
+}
+
+/* 3D Book Mockup Perspective System */
+.book-perspective {
+  perspective: 1200px;
+}
+
+.book-mockup {
+  transform: rotateY(-22deg) rotateX(12deg) rotateZ(-2deg);
+  transform-style: preserve-3d;
+  box-shadow: 
+    -5px 5px 15px rgba(0,0,0,0.8),
+    1px 1px 1px rgba(255,255,255,0.05) inset;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.book-mockup-hover:hover .book-mockup {
+  transform: rotateY(-10deg) rotateX(5deg) rotateZ(0deg) scale(1.05);
+  box-shadow: 
+    -15px 15px 35px rgba(211, 197, 246, 0.25),
+    0px 0px 20px rgba(211, 197, 246, 0.15);
+}
+
+/* Neon glow border utilities */
+.glow-border-blue {
+  box-shadow: 0 0 15px rgba(211, 197, 246, 0.15);
+  border: 1px solid rgba(211, 197, 246, 0.2);
+}
+
+.glow-border-blue:hover {
+  box-shadow: 0 0 25px rgba(211, 197, 246, 0.3);
+  border-color: rgba(211, 197, 246, 0.5);
+}
+
+.glow-text-blue {
+  text-shadow: 0 0 10px rgba(211, 197, 246, 0.5);
+}
