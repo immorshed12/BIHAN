@@ -26,11 +26,11 @@ async function dbConnect(): Promise<typeof mongoose> {
     throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
   }
 
-  if (cached.conn) {
-    return cached.conn;
+  if (cached!.conn) {
+    return cached!.conn;
   }
 
-  if (!cached.promise) {
+  if (!cached!.promise) {
     // Optimization parameters tailored for MongoDB Atlas M0 (Free Tier) in a Serverless Environment:
     // 1. maxPoolSize: 2 (Limit connection pool size per lambdas to prevent hitting Atlas 500-conn ceiling).
     // 2. serverSelectionTimeoutMS: 5000 (Fail-fast in serverless functions to avoid costly run-time timeouts).
@@ -43,19 +43,19 @@ async function dbConnect(): Promise<typeof mongoose> {
       socketTimeoutMS: 45000,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI!, opts).then((m) => {
+    cached!.promise = mongoose.connect(MONGODB_URI!, opts).then((m) => {
       return m;
     });
   }
 
   try {
-    cached.conn = await cached.promise;
+    cached!.conn = await cached!.promise;
   } catch (e) {
-    cached.promise = null;
+    cached!.promise = null;
     throw e;
   }
 
-  return cached.conn;
+  return cached!.conn;
 }
 
 export default dbConnect;
