@@ -13,10 +13,12 @@
     "autoprefixer": "^10.4.19",
     "clsx": "^2.1.1",
     "framer-motion": "^11.2.10",
+    "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.395.0",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.1",
     "next": "^14.2.3",
+    "nodemailer": "^8.0.8",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^4.3.136",
     "postcss": "^8.4.38",
@@ -27,7 +29,9 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20.14.2",
+    "@types/nodemailer": "^8.0.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "typescript": "^5.4.5"

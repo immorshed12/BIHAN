@@ -131,7 +131,15 @@ export default function Home() {
 
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          setUser(data.user);
+        }
+      })
+      .catch(err => console.error('Session fetch error:', err));
+  }, [setUser]);
 
   // Checkout Drawer state
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -211,44 +219,81 @@ export default function Home() {
     }
   };
 
-  // Real Email Auth Submission logic
+  // Real Email Auth OTP Submission logic
+  const [authStep, setAuthStep] = useState<'email' | 'otp'>('email');
+  const [authOtp, setAuthOtp] = useState('');
+  const [authError, setAuthError] = useState('');
+
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!authEmail) return;
 
     setAuthSubmitting(true);
-    await new Promise(r => setTimeout(r, 1000)); // Simulate Nodemailer/JWT handshake
-    
-    // Auto role mapping based on email strings
-    const isMatchedAdmin = authEmail.includes('admin');
-    setUser({
-      id: 'custom_auth_user',
-      email: authEmail,
-      name: authName || authEmail.split('@')[0],
-      role: isMatchedAdmin ? 'admin' : 'user',
-      purchasedBooks: []
-    });
+    setAuthError('');
 
-    setAuthSubmitting(false);
-    setIsAuthModalOpen(false);
-    setAuthEmail('');
-    setAuthName('');
+    try {
+      const response = await fetch('/api/auth/send-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: authEmail }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'ভেরিফিকেশন কোড পাঠাতে সমস্যা হয়েছে।');
+      }
+
+      setAuthStep('otp');
+    } catch (err: any) {
+      setAuthError(err.message || 'নেটওয়ার্ক ত্রুটি, অনুগ্রহ করে আবার চেষ্টা করুন।');
+    } finally {
+      setAuthSubmitting(false);
+    }
+  };
+
+  const handleAuthOtpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!authOtp) return;
+
+    setAuthSubmitting(true);
+    setAuthError('');
+
+    try {
+      const response = await fetch('/api/auth/verify-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: authEmail, code: authOtp }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'ভেরিফিকেশন কোডটি সঠিক নয়।');
+      }
+
+      setUser(data.user);
+      setIsAuthModalOpen(false);
+      setAuthStep('email');
+      setAuthEmail('');
+      setAuthName('');
+      setAuthOtp('');
+    } catch (err: any) {
+      setAuthError(err.message || 'ভেরিফিকেশন ব্যর্থ হয়েছে, দয়া করে আবার চেষ্টা করুন।');
+    } finally {
+      setAuthSubmitting(false);
+    }
   };
 
   const handleGoogleAuth = async () => {
-    setAuthSubmitting(true);
-    await new Promise(r => setTimeout(r, 800)); // Mock Firebase/Google JWT callback
-    
-    setUser({
-      id: 'google_user',
-      email: 'customer.google@gronthi.com',
-      name: 'গুগল ইউজার',
-      role: 'user',
-      purchasedBooks: []
-    });
+    setAuthError('গুগল লগইন বর্তমানে নিষ্ক্রিয় আছে। অনুগ্রহ করে নিচের ইমেইল ওটিপি পদ্ধতি ব্যবহার করুন।');
+  };
 
-    setAuthSubmitting(false);
-    setIsAuthModalOpen(false);
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
+    logout();
   };
 
   // Step 1: Send Free PDF Verification Code
@@ -554,7 +599,11 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsAuthModalOpen(false)}
+              onClick={() => {
+                setIsAuthModalOpen(false);
+                setAuthStep('email');
+                setAuthError('');
+              }}
               className="absolute inset-0 bg-velvet/80 backdrop-blur-md"
             />
 
@@ -576,7 +625,11 @@ export default function Home() {
                   </h3>
                 </div>
                 <button 
-                  onClick={() => setIsAuthModalOpen(false)}
+                  onClick={() => {
+                    setIsAuthModalOpen(false);
+                    setAuthStep('email');
+                    setAuthError('');
+                  }}
                   className="w-8 h-8 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-white transition cursor-pointer select-none"
                 >
                   ✕
@@ -586,7 +639,6 @@ export default function Home() {
               {/* 1. Stylish Google SSO Trigger (Main Focus) */}
               <button 
                 onClick={handleGoogleAuth}
-                disabled={authSubmitting}
                 className="w-full py-3.5 bg-white hover:bg-slate-100 text-slate-950 font-black rounded-2xl transition duration-300 flex items-center justify-center gap-2.5 shadow-lg shadow-white/5 text-xs cursor-pointer select-none border border-slate-200"
               >
                 {/* Google Icon SVG */}
@@ -606,71 +658,124 @@ export default function Home() {
                 <div className="flex-grow h-px bg-white/10" />
               </div>
 
-              {/* 3. Secure Email Inputs */}
-              <form onSubmit={handleAuthSubmit} className="flex flex-col gap-4 font-sans">
-                
-                {authMode === 'signup' && (
+              {/* Error Box */}
+              {authError && (
+                <div className="text-xs text-rose-400 font-bold bg-rose-500/10 border border-rose-500/20 px-4 py-2.5 rounded-xl">
+                  {authError}
+                </div>
+              )}
+
+              {authStep === 'email' ? (
+                /* 3. Secure Email Inputs */
+                <form onSubmit={handleAuthSubmit} className="flex flex-col gap-4 font-sans">
+                  
+                  {authMode === 'signup' && (
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] uppercase font-bold tracking-wider text-slate-400 select-none">আপনার নাম</label>
+                      <input 
+                        type="text"
+                        required
+                        placeholder="উদা. সোহেল রানা"
+                        value={authName}
+                        onChange={(e) => setAuthName(e.target.value)}
+                        className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-semibold focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20"
+                      />
+                    </div>
+                  )}
+
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] uppercase font-bold tracking-wider text-slate-400 select-none">আপনার নাম</label>
+                    <label className="text-[10px] uppercase font-bold tracking-wider text-slate-400 select-none">আপনার ইমেইল ঠিকানা দিন</label>
+                    <input 
+                      type="email"
+                      required
+                      placeholder="you@example.com"
+                      value={authEmail}
+                      onChange={(e) => setAuthEmail(e.target.value)}
+                      className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-mono font-medium focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={authSubmitting}
+                    className="w-full py-3.5 bg-gradient-to-r from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 text-white font-black text-xs rounded-2xl transition duration-300 shadow-lg shadow-primary-500/15 flex items-center justify-center gap-2 cursor-pointer select-none"
+                  >
+                    {authSubmitting ? (
+                      <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        ভেরিফিকেশন কোড পাঠান
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                        </svg>
+                      </>
+                    )}
+                  </button>
+                </form>
+              ) : (
+                /* 3. OTP Code Input */
+                <form onSubmit={handleAuthOtpSubmit} className="flex flex-col gap-4 font-sans">
+                  <div className="p-3 bg-lavender/5 border border-lavender/10 text-[11px] text-slate-300 rounded-xl leading-relaxed">
+                    আমরা <strong className="text-lavender font-mono">{authEmail}</strong> ইমেইলে একটি ভেরিফিকেশন কোড পাঠিয়েছি। ওটিপিটি নিচে ইনপুট করুন। (লোকাল সার্ভার বা ভার্সেল লগে ওটিপি দেখা যাবে)
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] uppercase font-bold tracking-wider text-slate-400 select-none">৬-ডিজিটের ভেরিফিকেশন ওটিপি (OTP)</label>
                     <input 
                       type="text"
                       required
-                      placeholder="উদা. সোহেল রানা"
-                      value={authName}
-                      onChange={(e) => setAuthName(e.target.value)}
-                      className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-semibold focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20"
+                      maxLength={6}
+                      placeholder="উদা. 123456"
+                      value={authOtp}
+                      onChange={(e) => setAuthOtp(e.target.value)}
+                      className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-mono font-bold tracking-widest text-center focus:border-primary-500"
                     />
                   </div>
-                )}
 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] uppercase font-bold tracking-wider text-slate-400 select-none">আপনার ইমেইল ঠিকানা দিন</label>
-                  <input 
-                    type="email"
-                    required
-                    placeholder="you@example.com"
-                    value={authEmail}
-                    onChange={(e) => setAuthEmail(e.target.value)}
-                    className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-mono font-medium focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={authSubmitting}
-                  className="w-full py-3.5 bg-gradient-to-r from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 text-white font-black text-xs rounded-2xl transition duration-300 shadow-lg shadow-primary-500/15 flex items-center justify-center gap-2 cursor-pointer select-none"
-                >
-                  {authSubmitting ? (
-                    <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      এগিয়ে যান
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                      </svg>
-                    </>
-                  )}
-                </button>
-              </form>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAuthStep('email');
+                        setAuthError('');
+                      }}
+                      className="py-3 border border-white/10 hover:bg-white/5 text-slate-300 font-bold text-xs rounded-2xl transition text-center cursor-pointer"
+                    >
+                      ইমেইল পরিবর্তন করুন
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={authSubmitting}
+                      className="py-3 bg-gradient-to-r from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 text-white font-black text-xs rounded-2xl transition duration-300 shadow-lg shadow-primary-500/15 flex items-center justify-center"
+                    >
+                      {authSubmitting ? (
+                        <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                      ) : 'কোড যাচাই করুন'}
+                    </button>
+                  </div>
+                </form>
+              )}
 
               {/* 4. Auth toggle buttons */}
-              <div className="text-center mt-1 border-t border-white/5 pt-4">
-                {authMode === 'login' ? (
-                  <button 
-                    onClick={() => setAuthMode('signup')}
-                    className="text-xs font-bold text-slate-400 hover:text-primary-400 transition cursor-pointer select-none"
-                  >
-                    নতুন অ্যাকাউন্ট তৈরি করতে চান? <span className="underline decoration-primary-500/50 underline-offset-2 hover:decoration-primary-400">এখানে ক্লিক করুন</span>
-                  </button>
-                ) : (
-                  <button 
-                    onClick={() => setAuthMode('login')}
-                    className="text-xs font-bold text-slate-400 hover:text-primary-400 transition cursor-pointer select-none"
-                  >
-                    ইতিমধ্যে অ্যাকাউন্ট আছে? <span className="underline select-none underline-offset-2 decoration-primary-500/50 hover:decoration-primary-400">লগইন করুন</span>
-                  </button>
-                )}
-              </div>
+              {authStep === 'email' && (
+                <div className="text-center mt-1 border-t border-white/5 pt-4">
+                  {authMode === 'login' ? (
+                    <button 
+                      onClick={() => setAuthMode('signup')}
+                      className="text-xs font-bold text-slate-400 hover:text-primary-400 transition cursor-pointer select-none"
+                    >
+                      নতুন অ্যাকাউন্ট তৈরি করতে চান? <span className="underline decoration-primary-500/50 underline-offset-2 hover:decoration-primary-400">এখানে ক্লিক করুন</span>
+                    </button>
+                  ) : (
+                    <button 
+                      onClick={() => setAuthMode('login')}
+                      className="text-xs font-bold text-slate-400 hover:text-primary-400 transition cursor-pointer select-none"
+                    >
+                      ইতিমধ্যে অ্যাকাউন্ট আছে? <span className="underline select-none underline-offset-2 decoration-primary-500/50 hover:decoration-primary-400">লগইন করুন</span>
+                    </button>
+                  )}
+                </div>
+              )}
 
             </motion.div>
           </div>
