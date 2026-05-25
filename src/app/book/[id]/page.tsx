@@ -1001,7 +1001,7 @@ export default function BookDetailsPage({ params }: { params: { id: string } }) 
                 /* 3. OTP Code Input */
                 <form onSubmit={handleAuthOtpSubmit} className="flex flex-col gap-4 font-sans">
                   <div className="p-3 bg-lavender/5 border border-lavender/10 text-[11px] text-slate-300 rounded-xl leading-relaxed">
-                    আমরা <strong className="text-lavender font-mono">{authEmail}</strong> ইমেইলে একটি ভেরিফিকেশন কোড পাঠিয়েছি। ওটিপিটি নিচে ইনপুট করুন। (লোকাল সার্ভার বা ভার্সেল লগে ওটিপি দেখা যাবে)
+                    আমরা আপনার <strong className="text-lavender font-mono">{authEmail}</strong> ইমেইলে একটি ভেরিফিকেশন ওটিপি (OTP) কোড পাঠিয়েছি। ওটিপিটি নিচে ইনপুট করুন। (মেইলটি না পেলে অনুগ্রহ করে আপনার ইনবক্স ও স্প্যাম ফোল্ডার চেক করুন)
                   </div>
 
                   <div className="flex flex-col gap-1.5">
