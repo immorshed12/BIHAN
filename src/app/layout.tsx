@@ -15,8 +15,27 @@ const notoBengali = Noto_Sans_Bengali({
 });
 
 export const metadata: Metadata = {
-  title: 'গ্রন্থী - প্রিমিয়াম পিডিএফ স্টোর',
-  description: 'প্রিমিয়াম পিডিএফ রিডার ও স্টোর। বিকাশ ও নগদে সরাসরি সুরক্ষিত পেমেন্ট করুন এবং তাত্ক্ষনিকভাবে পিডিএফ ডাউনলোড করে পড়ুন।',
+  title: 'বিহান BIHAN - প্রিমিয়াম পিডিএফ স্টোর',
+  description: 'প্রিমিয়াম পিডিএফ রিডার ও স্টোর। বিকাশ ও নগদে সরাসরি সুরক্ষিত পেমেন্ট করুন এবং তাৎক্ষণিকভাবে পিডিএফ ডাউনলোড করে পড়ুন।',
+  keywords: ['বিহান', 'BIHAN', 'PDF', 'বই', 'ডিজিটাল', 'বিকাশ', 'নগদ', 'ই-বুক', 'Bihan', 'bangla book', 'pdf selling'],
+  themeColor: '#3b2a60',
+  openGraph: {
+    title: 'বিহান BIHAN — বাংলাদেশের প্রিমিয়াম ডিজিটাল বুক স্টোর',
+    description: 'প্রিমিয়াম পিডিএফ গাইড ও ই-বুক। বিকাশ ও নগদে সহজ পেমেন্ট, তাৎক্ষণিক অ্যাক্সেস।',
+    url: 'https://gronthi.vercel.app',
+    siteName: 'বিহান (BIHAN)',
+    locale: 'bn_BD',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'বিহান BIHAN — বাংলাদেশের প্রিমিয়াম ডিজিটাল বুক স্টোর',
+    description: 'প্রিমিয়াম পিডিএফ গাইড ও ই-বুক। বিকাশ ও নগদে সহজ পেমেন্ট।',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

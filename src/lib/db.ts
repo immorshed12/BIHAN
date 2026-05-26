@@ -1,11 +1,12 @@
+
 import mongoose from 'mongoose';
 import dns from 'dns';
 
-// Force node to use public Google & Cloudflare DNS to bypass local ISP blocks on SRV records
+// Configure public DNS resolvers to bypass local ISP SRV lookup blocks
 try {
-  dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
-} catch (e) {
-  console.warn('Failed to set custom DNS servers:', e);
+  dns.setServers(['1.1.1.1', '8.8.8.8']);
+} catch (dnsErr: any) {
+  console.warn('[DB] Failed to set custom DNS fallback:', dnsErr.message);
 }
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -34,7 +35,7 @@ async function dbConnect(): Promise<typeof mongoose> {
     throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
   }
 
-  if (cached!.conn) {
+  if (cached!.conn && mongoose.connection.readyState === 1) {
     return cached!.conn;
   }
 
@@ -45,10 +46,11 @@ async function dbConnect(): Promise<typeof mongoose> {
     // 3. socketTimeoutMS: 45000 (Keep-alive config optimal for free tier network performance).
     const opts = {
       bufferCommands: false,
-      maxPoolSize: 2,
+      maxPoolSize: 5,
       minPoolSize: 1,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
+      serverSelectionTimeoutMS: 15000, // 15 seconds to survive ISP network lag
+      socketTimeoutMS: 60000,
+      connectTimeoutMS: 15000,
     };
 
     cached!.promise = mongoose.connect(MONGODB_URI!, opts).then((m) => {

@@ -5,6 +5,9 @@ import User from '@/models/User';
 import { generateSecureDownloadUrl } from '@/lib/gcs';
 import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
 import { Storage } from '@google-cloud/storage';
+import { join } from 'path';
+import { existsSync } from 'fs';
+import { readFile } from 'fs/promises';
 
 const storage = new Storage({
   projectId: process.env.GCP_PROJECT_ID,
@@ -105,7 +108,8 @@ export async function GET(
       };
 
       // Simulated purchase check: admin emails bypass preview limits
-      const isPurchased = email.includes('admin');
+      const isFreeBook = book.isFree || book.price === 0;
+      const isPurchased = email.includes('admin') || isFreeBook;
       const previewLimit = book.previewLimit || 4;
       if (!isPurchased && pageNum > previewLimit) {
         return NextResponse.json({ 
@@ -234,8 +238,8 @@ export async function GET(
     }
 
     // 2. Determine Authentication & Purchase State
-    let isPurchased = false;
-    if (email) {
+    let isPurchased = book.isFree || book.price === 0;
+    if (!isPurchased && email) {
       const user = await User.findOne({ email });
       if (user && (user.role === 'admin' || user.purchasedBooks.includes(book._id))) {
         isPurchased = true;
@@ -255,16 +259,25 @@ export async function GET(
       return NextResponse.json({ error: 'Page number out of bounds' }, { status: 400 });
     }
 
-    const bucket = storage.bucket(bucketName);
-    const file = bucket.file(book.filePath);
-    
-    const [exists] = await file.exists();
-    if (!exists) {
-      return NextResponse.json({ error: 'Raw book file not found in storage' }, { status: 500 });
-    }
+    let originalPdfBuffer: Buffer;
 
-    // Download file buffer into memory
-    const [originalPdfBuffer] = await file.download();
+    // Check if filePath is a local public file first, or fallback to GCS
+    const localPath = join(process.cwd(), 'public', book.filePath.startsWith('/') ? book.filePath.slice(1) : book.filePath);
+    if (existsSync(localPath)) {
+      originalPdfBuffer = await readFile(localPath);
+    } else {
+      const bucket = storage.bucket(bucketName);
+      const file = bucket.file(book.filePath);
+      
+      const [exists] = await file.exists();
+      if (!exists) {
+        return NextResponse.json({ error: 'Raw book file not found in storage' }, { status: 500 });
+      }
+
+      // Download file buffer into memory
+      const [downloaded] = await file.download();
+      originalPdfBuffer = downloaded;
+    }
 
     // 5. PDF Extraction & Watermarking Engine (Pure JS pdf-lib)
     const srcDoc = await PDFDocument.load(originalPdfBuffer);

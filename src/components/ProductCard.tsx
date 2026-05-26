@@ -11,14 +11,41 @@ interface ProductCardProps {
     rating: number;
     isFree: boolean;
     coverColor?: string;
+    _id?: string;
   };
   onAction: (bookId: string) => void;
 }
 
 export default function ProductCard({ book, onAction }: ProductCardProps) {
+  const cardRef = React.useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const card = cardRef.current;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const xc = rect.width / 2;
+    const yc = rect.height / 2;
+    const dx = x - xc;
+    const dy = y - yc;
+    // Rotate card up to 10 degrees dynamically
+    const rx = -(dy / yc) * 10;
+    const ry = (dx / xc) * 10;
+    card.style.setProperty('--rx', `${rx}deg`);
+    card.style.setProperty('--ry', `${ry}deg`);
+  };
+
+  const handleMouseLeave = () => {
+    if (!cardRef.current) return;
+    cardRef.current.style.setProperty('--rx', '0deg');
+    cardRef.current.style.setProperty('--ry', '0deg');
+  };
+
   // Define cover backgrounds based on titles/colors
   const getCoverGradient = () => {
-    switch (book.id) {
+    const bookIdStr = book.id || book._id;
+    switch (bookIdStr) {
       case "60c72b2f9b1d8a23c4d5e6f1": // UI/UX Guide
         return "from-cyan-900 via-indigo-950 to-dark-950";
       case "60c72b2f9b1d8a23c4d5e6f2": // Art techniques
@@ -44,10 +71,17 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
 
   return (
     <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className={`glass-panel rounded-3xl p-6 flex flex-col justify-between gap-6 relative transition-all duration-300 ${
+      style={{
+        transform: 'perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))',
+        transformStyle: 'preserve-3d',
+      }}
+      className={`glass-panel rounded-3xl p-6 flex flex-col justify-between gap-6 relative transition-all duration-100 ${
         book.isFree 
           ? 'border-emerald-500/10 hover:border-emerald-500/30 shadow-emerald-950/5' 
           : 'border-white/5 hover:border-lavender/35 hover:shadow-[0_0_25px_rgba(211,197,246,0.18)] shadow-black/40'
@@ -83,7 +117,18 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
           {/* Front Book Cover Graphic */}
           <div className={`absolute inset-0 bg-gradient-to-br ${getCoverGradient()} rounded-r-xl border border-white/10 shadow-2xl flex flex-col justify-between p-4 overflow-hidden`}>
             {/* Top Gloss sheen */}
-            <div className="absolute top-0 left-0 right-0 h-[150%] bg-gradient-to-b from-white/10 via-transparent to-transparent -skew-y-[40deg] origin-top-left pointer-events-none" />
+            <div className="absolute top-0 left-0 right-0 h-[150%] bg-gradient-to-b from-white/10 via-transparent to-transparent -skew-y-[40deg] origin-top-left pointer-events-none z-10" />
+
+            {book.coverImage && (
+              <img 
+                src={book.coverImage} 
+                alt={book.title} 
+                className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-300 group-hover:scale-105" 
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            )}
 
             {/* Custom Icon/Badge based on books */}
             <div className="flex justify-between items-start z-10">
@@ -159,7 +204,7 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
 
         {book.isFree ? (
           <button
-            onClick={() => onAction(book.id)}
+            onClick={() => onAction(book.id || book._id || '')}
             className="px-5 py-2.5 bg-emerald-500/10 hover:bg-emerald-500 border border-emerald-500/30 hover:border-emerald-500 text-emerald-400 hover:text-slate-950 text-xs font-black rounded-xl transition duration-300 shadow-md shadow-emerald-500/5 flex items-center gap-1.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
@@ -169,7 +214,7 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
           </button>
         ) : (
           <button
-            onClick={() => onAction(book.id)}
+            onClick={() => onAction(book.id || book._id || '')}
             className="px-5 py-2.5 bg-gradient-to-r from-velvet/50 to-[#4e3a7a] hover:from-[#4e3a7a] hover:to-[#5d4692] text-lavender border border-lavender/20 text-xs font-black rounded-xl transition duration-300 shadow-md shadow-lavender/5 flex items-center gap-1.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 text-lavender">

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@/store/useStore';
 import ProductCard from '@/components/ProductCard';
+import Footer from '@/components/Footer';
 
 const BANGLA_BOOKS = [
   {
@@ -119,9 +120,21 @@ const BANGLA_BOOKS = [
 
 export default function Home() {
   const { user, setUser, logout } = useStore();
-  const [showSimulateDropdown, setShowSimulateDropdown] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isAdminPreview, setIsAdminPreview] = useState(false);
   
+  // Dynamic Catalog State
+  const [books, setBooks] = useState<any[]>([]);
+  const [booksLoading, setBooksLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  // Dynamically extract unique categories from loaded books
+  const getUniqueCategories = () => {
+    const categoriesSet = new Set(books.map(b => b.category).filter(Boolean));
+    return ['All', ...Array.from(categoriesSet)];
+  };
+
   // Real Auth Modal state
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authEmail, setAuthEmail] = useState('');
@@ -131,14 +144,44 @@ export default function Home() {
 
   useEffect(() => {
     setIsMounted(true);
+
+    const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const viewAsUser = searchParams?.get('view') === 'user';
+
+    // Dynamically inject Google Identity Services script for dynamic Google login support
+    if (typeof window !== 'undefined') {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    }
+
     fetch('/api/auth/me')
       .then(res => res.json())
       .then(data => {
         if (data.user) {
           setUser(data.user);
+          if (data.user.role === 'admin') {
+            if (viewAsUser) {
+              setIsAdminPreview(true);
+            } else {
+              window.location.href = '/admin';
+            }
+          }
         }
       })
       .catch(err => console.error('Session fetch error:', err));
+
+    fetch('/api/books')
+      .then(res => res.json())
+      .then(data => {
+        if (data.books) {
+          setBooks(data.books);
+        }
+      })
+      .catch(err => console.error('Fetch books error:', err))
+      .finally(() => setBooksLoading(false));
   }, [setUser]);
 
   // Checkout Drawer state
@@ -168,47 +211,23 @@ export default function Home() {
     }
   };
 
-  // Set Simulated Identity from bottom right gear
-  const selectRole = (role: 'guest' | 'customer' | 'admin') => {
-    if (role === 'guest') {
-      setUser({
-        id: 'guest_user',
-        email: 'client@example.com',
-        name: 'অতিথি পাঠক',
-        role: 'user',
-        purchasedBooks: []
-      });
-    } else if (role === 'customer') {
-      setUser({
-        id: 'premium_user',
-        email: 'customer@gronthi.com',
-        name: 'সোহেল রানা',
-        role: 'user',
-        purchasedBooks: ['60c72b2f9b1d8a23c4d5e6f1']
-      });
-    } else if (role === 'admin') {
-      setUser({
-        id: 'admin_user',
-        email: 'admin@gronthi.com',
-        name: 'প্রধান অ্যাডমিন',
-        role: 'admin',
-        purchasedBooks: []
-      });
-    }
-    setShowSimulateDropdown(false);
-  };
+
 
   const handleBookAction = (bookId: string) => {
-    const targetBook = BANGLA_BOOKS.find(b => b.id === bookId);
+    const targetBook = books.find(b => b._id === bookId || b.id === bookId);
     if (!targetBook) return;
 
     if (targetBook.isFree) {
-      setFreeBook(targetBook);
-      setFreeStep('email');
-      setFreeEmail('');
-      setFreeOtp('');
-      setFreeError('');
-      setIsFreeModalOpen(true);
+      if (user && user.email && user.id !== 'guest_user') {
+        window.location.href = `/book/${targetBook._id || targetBook.id}${isAdminPreview ? '?view=user' : ''}`;
+      } else {
+        setFreeBook(targetBook);
+        setFreeStep('email');
+        setFreeEmail('');
+        setFreeOtp('');
+        setFreeError('');
+        setIsFreeModalOpen(true);
+      }
     } else {
       setCheckoutBook(targetBook);
       setSubmitSuccess(false);
@@ -235,12 +254,13 @@ export default function Home() {
       const response = await fetch('/api/auth/send-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: authEmail }),
+        body: JSON.stringify({ email: authEmail, mode: authMode, name: authName }),
       });
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'ভেরিফিকেশন কোড পাঠাতে সমস্যা হয়েছে।');
+        const errorMsg = data.details ? `${data.error} (বিশদ: ${data.details})` : (data.error || 'ভেরিফিকেশন কোড পাঠাতে সমস্যা হয়েছে।');
+        throw new Error(errorMsg);
       }
 
       setAuthStep('otp');
@@ -262,12 +282,13 @@ export default function Home() {
       const response = await fetch('/api/auth/verify-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: authEmail, code: authOtp }),
+        body: JSON.stringify({ email: authEmail, code: authOtp, name: authName }),
       });
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'ভেরিফিকেশন কোডটি সঠিক নয়।');
+        const errorMsg = data.details ? `${data.error} (বিশদ: ${data.details})` : (data.error || 'ভেরিফিকেশন কোডটি সঠিক নয়।');
+        throw new Error(errorMsg);
       }
 
       setUser(data.user);
@@ -276,6 +297,9 @@ export default function Home() {
       setAuthEmail('');
       setAuthName('');
       setAuthOtp('');
+      if (data.user.role === 'admin') {
+        window.location.href = '/admin';
+      }
     } catch (err: any) {
       setAuthError(err.message || 'ভেরিফিকেশন ব্যর্থ হয়েছে, দয়া করে আবার চেষ্টা করুন।');
     } finally {
@@ -284,7 +308,51 @@ export default function Home() {
   };
 
   const handleGoogleAuth = async () => {
-    setAuthError('গুগল লগইন বর্তমানে নিষ্ক্রিয় আছে। অনুগ্রহ করে নিচের ইমেইল ওটিপি পদ্ধতি ব্যবহার করুন।');
+    const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (!googleClientId) {
+      console.warn('[Google Auth Info] NEXT_PUBLIC_GOOGLE_CLIENT_ID is not configured in your .env.local file. Google login is disabled.');
+      setAuthError('গুগল লগইন বর্তমানে নিষ্ক্রিয় আছে। অনুগ্রহ করে নিচের ইমেইল ওটিপি পদ্ধতি ব্যবহার করুন।');
+      return;
+    }
+
+    try {
+      setAuthError('');
+      setAuthSubmitting(true);
+
+      (window as any).google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: async (response: any) => {
+          try {
+            const res = await fetch('/api/auth/google', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ idToken: response.credential }),
+            });
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.error || 'গুগল ভেরিফিকেশন ব্যর্থ হয়েছে।');
+
+            setUser(data.user);
+            setIsAuthModalOpen(false);
+            if (data.user.role === 'admin') {
+              window.location.href = '/admin';
+            } else {
+              window.location.reload();
+            }
+          } catch (err: any) {
+            setAuthError(err.message || 'গুগল লগইন ব্যর্থ হয়েছে।');
+          } finally {
+            setAuthSubmitting(false);
+          }
+        }
+      });
+
+      (window as any).google.accounts.id.prompt();
+    } catch (err) {
+      console.error('Google GIS prompt failed:', err);
+      setAuthError('গুগল লগইন কনসোল লোড করা যায়নি। অনুগ্রহ করে নেটওয়ার্ক কানেকশন চেক করুন।');
+      setAuthSubmitting(false);
+    }
   };
 
   const handleLogout = async () => {
@@ -303,9 +371,26 @@ export default function Home() {
 
     setFreeSubmitting(true);
     setFreeError('');
-    await new Promise(r => setTimeout(r, 800));
-    setFreeSubmitting(false);
-    setFreeStep('otp');
+
+    try {
+      const response = await fetch('/api/auth/send-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: freeEmail }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        const errorMsg = data.details ? `${data.error} (বিশদ: ${data.details})` : (data.error || 'ভেরিফিকেশন কোড পাঠাতে সমস্যা হয়েছে।');
+        throw new Error(errorMsg);
+      }
+
+      setFreeStep('otp');
+    } catch (err: any) {
+      setFreeError(err.message || 'নেটওয়ার্ক ত্রুটি, অনুগ্রহ করে আবার চেষ্টা করুন।');
+    } finally {
+      setFreeSubmitting(false);
+    }
   };
 
   // Step 2: Validate OTP & Unlock Free Guide
@@ -315,14 +400,26 @@ export default function Home() {
 
     setFreeSubmitting(true);
     setFreeError('');
-    await new Promise(r => setTimeout(r, 600));
-    
-    if (freeOtp.trim() === '123456' || freeOtp.length === 6) {
-      setFreeSubmitting(false);
+
+    try {
+      const response = await fetch('/api/auth/verify-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: freeEmail, code: freeOtp }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        const errorMsg = data.details ? `${data.error} (বিশদ: ${data.details})` : (data.error || 'ভেরিফিকেশন কোডটি সঠিক নয়।');
+        throw new Error(errorMsg);
+      }
+
+      setUser(data.user);
       setFreeStep('success');
-    } else {
+    } catch (err: any) {
+      setFreeError(err.message || 'ভেরিফিকেশন ব্যর্থ হয়েছে, দয়া করে আবার চেষ্টা করুন।');
+    } finally {
       setFreeSubmitting(false);
-      setFreeError('ভেরিফিকেশন কোডটি সঠিক নয়। পুনরায় চেষ্টা করুন বা নতুন কোড পাঠান।');
     }
   };
 
@@ -344,7 +441,7 @@ export default function Home() {
           'x-user-email': user?.email || 'customer@gronthi.com',
         },
         body: JSON.stringify({
-          bookId: checkoutBook?.id,
+          bookId: checkoutBook?._id || checkoutBook?.id,
           amountPaid: checkoutBook?.price,
           paymentGateway,
           customerPhone: phoneNumber,
@@ -370,7 +467,22 @@ export default function Home() {
   const isDevelopment = process.env.NODE_ENV === 'development';
 
   return (
-    <main className="min-h-screen bg-radial-glow bg-velvet text-slate-100 flex flex-col items-center pb-24 relative overflow-hidden font-sans">
+    <>
+      {isAdminPreview && (
+        <div className="w-full bg-gradient-to-r from-[#501c3e]/90 via-[#201140]/90 to-[#501c3e]/90 border-b border-lavender/30 text-slate-200 py-3 text-center text-xs font-sans font-bold flex items-center justify-center gap-3 backdrop-blur-md sticky top-0 z-[100] select-none shadow-lg">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-lavender animate-pulse" />
+            🛡️ <strong>এডমিন ইউজার ভিউ মোড:</strong> গ্রাহকরা যেভাবে স্টোরফ্রন্ট দেখবে, আপনিও সেভাবেই দেখছেন।
+          </span>
+          <Link 
+            href="/admin" 
+            className="px-3.5 py-1 bg-lavender text-velvet rounded-xl font-black transition-all duration-200 hover:bg-white hover:text-velvet hover:shadow-lg shadow shadow-lavender/10"
+          >
+            এডমিন প্যানেলে ফিরে যান →
+          </Link>
+        </div>
+      )}
+      <main className="min-h-screen bg-radial-glow bg-velvet text-slate-100 flex flex-col items-center pb-24 relative overflow-hidden font-sans">
       <div className="absolute inset-0 bg-radial-purple-glow opacity-30 pointer-events-none" />
       <div className="absolute w-[600px] h-[600px] rounded-full bg-lavender/5 blur-[120px] top-[-300px] left-[50%] -translate-x-[50%] pointer-events-none" />
 
@@ -381,8 +493,8 @@ export default function Home() {
           <Link href="/" className="flex items-center select-none cursor-pointer -my-4">
             <img 
               src="/logo.png" 
-              alt="গ্রন্থী (Gronthi)" 
-              className="h-24 md:h-32 w-auto object-contain filter drop-shadow-[0_0_20px_rgba(255,255,255,0.07)]"
+              alt="বিহান (BIHAN)" 
+              className="h-24 md:h-32 w-auto object-contain filter drop-shadow-[0_0_20px_rgba(15,23,42,0.03)]"
             />
           </Link>
 
@@ -431,8 +543,14 @@ export default function Home() {
                     {user.role === 'admin' ? 'অ্যাডমিন অ্যাকাউন্ট' : 'সদস্য'}
                   </span>
                 </div>
+                <Link
+                  href={isAdminPreview ? "/library?view=user" : "/library"}
+                  className="px-4 py-2 border border-white/10 bg-white/5 hover:bg-white/10 rounded-full text-xs font-black transition duration-200"
+                >
+                  প্রোফাইল
+                </Link>
                 <button 
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="px-4 py-2 border border-white/10 bg-white/5 hover:bg-rose-500/10 hover:border-rose-500/30 hover:text-rose-400 rounded-full text-xs font-black transition duration-200 cursor-pointer"
                 >
                   লগআউট
@@ -476,7 +594,7 @@ export default function Home() {
 
             <div className="flex flex-wrap items-center gap-4 mt-2">
               <button 
-                onClick={() => handleBookAction(BANGLA_BOOKS[0].id)}
+                onClick={() => handleBookAction("60c72b2f9b1d8a23c4d5e6f1")}
                 className="px-8 py-3 bg-gradient-to-r from-velvet/85 to-[#4e3a7a] hover:from-[#4e3a7a] hover:to-[#5d4692] text-lavender border border-lavender/30 font-bold rounded-2xl transition duration-300 text-sm shadow-lg shadow-lavender/10 flex items-center gap-2"
               >
                 পড়ুন এবং আনলক করুন
@@ -535,6 +653,59 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Dynamic Search & Category Filters Widget */}
+        <section className="glass-panel p-6 rounded-3xl border border-white/5 bg-dark-900/40 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl mt-4 select-none">
+          {/* Fuzzy Search Field */}
+          <div className="relative w-full md:max-w-md">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm">🔍</span>
+            <input 
+              type="text"
+              placeholder="বইয়ের নাম, লেখক বা বিবরণ দিয়ে খুঁজুন..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-11 pr-4 py-3 bg-velvet/40 border border-white/10 rounded-2xl text-xs font-semibold focus:border-lavender text-slate-200 placeholder:text-slate-500 transition duration-300 outline-none"
+            />
+            {searchQuery && (
+              <button 
+                onClick={() => setSearchQuery('')}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 text-xs transition"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
+          {/* Glassmorphic Category Dropdown Filter */}
+          <div className="relative w-full md:w-auto md:min-w-[220px]">
+            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-lavender text-sm z-10">▾</div>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full appearance-none pl-9 pr-5 py-3 bg-velvet/50 border border-lavender/20 hover:border-lavender/50 rounded-2xl text-xs font-black text-slate-200 focus:outline-none focus:border-lavender focus:ring-2 focus:ring-lavender/15 transition duration-300 cursor-pointer shadow-lg shadow-lavender/5 backdrop-blur-md"
+              style={{ backgroundImage: 'none' }}
+            >
+              {getUniqueCategories().map((cat) => (
+                <option
+                  key={cat}
+                  value={cat}
+                  className="bg-[#1a1130] text-slate-200 font-semibold"
+                >
+                  {cat === 'All' ? '📚 সব ক্যাটাগরি' : `• ${cat}`}
+                </option>
+              ))}
+            </select>
+            {selectedCategory !== 'All' && (
+              <button
+                onClick={() => setSelectedCategory('All')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-lavender/20 hover:bg-lavender/40 text-lavender text-[10px] flex items-center justify-center transition duration-200 z-10"
+                title="ফিল্টার মুছুন"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        </section>
+
         {/* Premium Products Category List */}
         <section id="premium-catalog" className="flex flex-col gap-8 mt-6">
           <div className="flex flex-col gap-1.5 text-left">
@@ -548,16 +719,60 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {BANGLA_BOOKS.filter(b => !b.isFree).map((book) => (
-              <ProductCard 
-                key={book.id} 
-                book={{
-                  ...book,
-                  coverImage: book.coverImage
-                }} 
-                onAction={handleBookAction} 
-              />
-            ))}
+            {booksLoading ? (
+              <div className="col-span-full py-16 flex items-center justify-center">
+                <div className="w-10 h-10 border-4 border-lavender/20 border-t-lavender rounded-full animate-spin" />
+              </div>
+            ) : books.map(b => ({
+                id: b._id,
+                title: b.title,
+                author: b.author,
+                description: b.description,
+                price: b.price,
+                rating: b.averageRating || 4.9,
+                coverImage: b.coverImage,
+                pageCount: b.pageCount,
+                previewLimit: b.previewLimit || 4,
+                isFree: b.isFree,
+                category: b.category
+              })).filter(book => {
+                const matchesSearch = 
+                  book.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                  book.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  book.description.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesCategory = selectedCategory === 'All' || book.category === selectedCategory;
+                return matchesSearch && matchesCategory && !book.isFree;
+              }).length === 0 ? (
+                <div className="col-span-full py-12 text-center text-slate-500 border border-dashed border-white/10 rounded-2xl">
+                  কোনো প্রিমিয়াম বই খুঁজে পাওয়া যায়নি।
+                </div>
+              ) : books.map(b => ({
+                id: b._id,
+                title: b.title,
+                author: b.author,
+                description: b.description,
+                price: b.price,
+                rating: b.averageRating || 4.9,
+                coverImage: b.coverImage,
+                pageCount: b.pageCount,
+                previewLimit: b.previewLimit || 4,
+                isFree: b.isFree,
+                category: b.category
+              })).filter(book => {
+                const matchesSearch = 
+                  book.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                  book.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  book.description.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesCategory = selectedCategory === 'All' || book.category === selectedCategory;
+                return matchesSearch && matchesCategory && !book.isFree;
+              }).map((book) => (
+                <ProductCard 
+                  key={book.id} 
+                  book={book} 
+                  onAction={handleBookAction} 
+                />
+              ))
+            }
           </div>
         </section>
 
@@ -574,16 +789,60 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {BANGLA_BOOKS.filter(b => b.isFree).map((book) => (
-              <ProductCard 
-                key={book.id} 
-                book={{
-                  ...book,
-                  coverImage: book.coverImage
-                }} 
-                onAction={handleBookAction} 
-              />
-            ))}
+            {booksLoading ? (
+              <div className="col-span-full py-16 flex items-center justify-center">
+                <div className="w-10 h-10 border-4 border-lavender/20 border-t-lavender rounded-full animate-spin" />
+              </div>
+            ) : books.map(b => ({
+                id: b._id,
+                title: b.title,
+                author: b.author,
+                description: b.description,
+                price: b.price,
+                rating: b.averageRating || 4.9,
+                coverImage: b.coverImage,
+                pageCount: b.pageCount,
+                previewLimit: b.previewLimit || 4,
+                isFree: b.isFree,
+                category: b.category
+              })).filter(book => {
+                const matchesSearch = 
+                  book.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                  book.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  book.description.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesCategory = selectedCategory === 'All' || book.category === selectedCategory;
+                return matchesSearch && matchesCategory && book.isFree;
+              }).length === 0 ? (
+                <div className="col-span-full py-12 text-center text-slate-500 border border-dashed border-white/10 rounded-2xl">
+                  কোনো ফ্রি রিসোর্স খুঁজে পাওয়া যায়নি।
+                </div>
+              ) : books.map(b => ({
+                id: b._id,
+                title: b.title,
+                author: b.author,
+                description: b.description,
+                price: b.price,
+                rating: b.averageRating || 4.9,
+                coverImage: b.coverImage,
+                pageCount: b.pageCount,
+                previewLimit: b.previewLimit || 4,
+                isFree: b.isFree,
+                category: b.category
+              })).filter(book => {
+                const matchesSearch = 
+                  book.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                  book.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  book.description.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesCategory = selectedCategory === 'All' || book.category === selectedCategory;
+                return matchesSearch && matchesCategory && book.isFree;
+              }).map((book) => (
+                <ProductCard 
+                  key={book.id} 
+                  book={book} 
+                  onAction={handleBookAction} 
+                />
+              ))
+            }
           </div>
         </section>
 
@@ -1057,7 +1316,7 @@ export default function Home() {
               {freeStep === 'otp' && (
                 <div className="flex flex-col gap-4">
                   <div className="p-3.5 rounded-xl bg-lavender/10 border border-lavender/20 text-xs text-lavender leading-relaxed font-sans">
-                    আমরা <strong className="text-slate-100">{freeEmail}</strong> ইমেইলে একটি ভেরিফিকেশন কোড পাঠিয়েছি। ওটিপিটি নিচে ইনপুট করুন। (সিমুলেশন ওটিপি: <strong className="text-slate-100 underline">123456</strong>)
+                    আমরা আপনার <strong className="text-slate-100">{freeEmail}</strong> ইমেইলে একটি ভেরিফিকেশন ওটিপি (OTP) কোড পাঠিয়েছি। ওটিপিটি নিচে ইনপুট করুন। (মেইলটি না পেলে অনুগ্রহ করে আপনার ইনবক্স ও স্প্যাম ফোল্ডার চেক করুন)
                   </div>
                   <form onSubmit={handleFreeOtpSubmit} className="flex flex-col gap-4 font-sans">
                     <div className="flex flex-col gap-1.5">
@@ -1124,70 +1383,9 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* FIX 4: 개발 시뮬레이터 플로팅 제어판 (DEV ONLY FLOAT PANEL IN BOTTOM-RIGHT CORNER) */}
-      {isMounted && isDevelopment && (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 font-sans">
-          
-          <AnimatePresence>
-            {showSimulateDropdown && (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                className="glass-panel p-4 rounded-2xl flex flex-col gap-2 min-w-[260px] border border-lavender/10 shadow-2xl text-left"
-              >
-                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-lavender/5 pb-2 mb-1 flex items-center justify-between">
-                  <span>🛠️ ডিভ সিমুলেটর (Dev Mode)</span>
-                  <span className="text-[8px] bg-lavender/20 text-lavender px-1 rounded">সচল</span>
-                </div>
-                
-                <button 
-                  onClick={() => selectRole('guest')}
-                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold hover:bg-lavender/5 text-slate-300 transition"
-                >
-                  অতিথি পাঠক (Guest)
-                </button>
-                
-                <button 
-                  onClick={() => selectRole('customer')}
-                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold hover:bg-lavender/5 text-slate-300 transition"
-                >
-                  সোহেল রানা (Customer)
-                </button>
-                
-                <button 
-                  onClick={() => selectRole('admin')}
-                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold hover:bg-lavender/5 text-slate-300 transition"
-                >
-                  প্রধান অ্যাডমিন (Admin)
-                </button>
-
-                <div className="h-px bg-lavender/5 my-1" />
-
-                <Link 
-                  href="/admin"
-                  className="w-full text-center py-2 bg-gradient-to-r from-velvet to-[#4e3a7a] hover:from-[#4e3a7a] hover:to-[#5d4692] text-lavender border border-lavender/20 font-extrabold rounded-xl text-xs transition cursor-pointer select-none"
-                >
-                  কন্ট্রোল প্যানেল দেখুন
-                </Link>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Floating Gear Icon Button */}
-          <button 
-            onClick={() => setShowSimulateDropdown(!showSimulateDropdown)}
-            className="w-12 h-12 rounded-full bg-velvet hover:bg-[#4e3a7a] text-lavender flex items-center justify-center shadow-lg shadow-lavender/10 hover:scale-105 active:scale-95 transition duration-200 cursor-pointer border border-lavender/25"
-            title="Developer Role Simulator Controls"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-5 h-5 ${showSimulateDropdown ? 'rotate-90' : ''} transition-transform duration-300`}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.43l1.004-.827c.292-.24.437-.613.43-.991a6.936 6.936 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-            </svg>
-          </button>
-        </div>
-      )}
 
     </main>
+    <Footer />
+    </>
   );
 }

@@ -6,6 +6,9 @@ import User from '@/models/User';
 import { generateSecureDownloadUrl, uploadSecuredWatermarkedPDF } from '@/lib/gcs';
 import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
 import { Storage } from '@google-cloud/storage';
+import { join } from 'path';
+import { existsSync } from 'fs';
+import { readFile } from 'fs/promises';
 
 const storage = new Storage({
   projectId: process.env.GCP_PROJECT_ID,
@@ -91,7 +94,13 @@ export async function GET(
       return NextResponse.json({ error: 'User account not found.' }, { status: 404 });
     }
 
-    const isPurchased = user.purchasedBooks.includes(bookId as any) || user.role === 'admin';
+    // 2. Fetch original Book details first
+    const book = await Book.findById(bookId);
+    if (!book) {
+      return NextResponse.json({ error: 'Book metadata not found.' }, { status: 404 });
+    }
+
+    const isPurchased = book.isFree || book.price === 0 || user.purchasedBooks.includes(bookId as any) || user.role === 'admin';
     
     // Find the latest approved order to extract the TxID for watermark stamp
     const approvedOrder = await Order.findOne({
@@ -100,30 +109,33 @@ export async function GET(
       status: 'approved',
     }).sort({ createdAt: -1 });
 
-    if (!isPurchased || (!approvedOrder && user.role !== 'admin')) {
+    if (!isPurchased || (!approvedOrder && user.role !== 'admin' && !book.isFree)) {
       return NextResponse.json({ 
         error: 'Forbidden. You do not own this book or payment is still pending verification.' 
       }, { status: 403 });
     }
 
-    const txId = approvedOrder ? approvedOrder.submittedTxID : 'MANUAL_ADMIN_OVERRIDE';
+    const txId = approvedOrder ? approvedOrder.submittedTxID : (book.isFree ? 'FREE_DOWNLOAD' : 'MANUAL_ADMIN_OVERRIDE');
 
-    // 2. Fetch original Book details
-    const book = await Book.findById(bookId);
-    if (!book) {
-      return NextResponse.json({ error: 'Book metadata not found.' }, { status: 404 });
+    let originalPdfBuffer: Buffer;
+
+    // Check if filePath is a local public file first, or fallback GCS
+    const localPath = join(process.cwd(), 'public', book.filePath.startsWith('/') ? book.filePath.slice(1) : book.filePath);
+    if (existsSync(localPath)) {
+      originalPdfBuffer = await readFile(localPath);
+    } else {
+      // 4. Download original PDF buffer from secure GCS bucket
+      const bucket = storage.bucket(bucketName);
+      const file = bucket.file(book.filePath);
+      const [exists] = await file.exists();
+      
+      if (!exists) {
+        return NextResponse.json({ error: 'Original guide file not found in storage.' }, { status: 500 });
+      }
+
+      const [downloaded] = await file.download();
+      originalPdfBuffer = downloaded;
     }
-
-    // 4. Download original PDF buffer from secure GCS bucket
-    const bucket = storage.bucket(bucketName);
-    const file = bucket.file(book.filePath);
-    const [exists] = await file.exists();
-    
-    if (!exists) {
-      return NextResponse.json({ error: 'Original guide file not found in storage.' }, { status: 500 });
-    }
-
-    const [originalPdfBuffer] = await file.download();
 
     // 5. PDF Watermarking & Layer Flattening Compilation
     const pdfDoc = await PDFDocument.load(originalPdfBuffer);

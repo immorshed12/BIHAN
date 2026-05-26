@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'fallback-super-secret-jwt-key-2026
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
-    const { email, code } = await req.json();
+    const { email, code, name } = await req.json();
 
     if (!email || !code) {
       return NextResponse.json({ error: 'Email and verification code are required' }, { status: 400 });
@@ -47,10 +47,10 @@ export async function POST(req: NextRequest) {
     const targetRole = isAdminEmail ? 'admin' : 'user';
 
     if (!user) {
-      // Auto-create new user
+      // Auto-create new user with submitted name (fallback to email prefix)
       user = await User.create({
         email: normalizedEmail,
-        name: normalizedEmail.split('@')[0],
+        name: name || normalizedEmail.split('@')[0],
         role: targetRole,
         purchasedBooks: []
       });
@@ -97,7 +97,11 @@ export async function POST(req: NextRequest) {
     return response;
 
   } catch (error: any) {
-    console.error('Verify OTP error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error('Verify OTP error detailed:', error);
+    return NextResponse.json({ 
+      error: 'Internal Server Error', 
+      details: error.message || String(error),
+      stack: error.stack
+    }, { status: 500 });
   }
 }

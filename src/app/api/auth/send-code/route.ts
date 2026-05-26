@@ -1,18 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import VerificationCode from '@/models/VerificationCode';
+import User from '@/models/User';
 import nodemailer from 'nodemailer';
 
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
-    const { email } = await req.json();
+    const { email, mode } = await req.json();
 
     if (!email || !email.includes('@')) {
-      return NextResponse.json({ error: 'Valid email address is required' }, { status: 400 });
+      return NextResponse.json({ error: 'সঠিক ইমেইল অ্যাড্রেস প্রদান করা আবশ্যক।' }, { status: 400 });
     }
 
     const normalizedEmail = email.toLowerCase().trim();
+
+    // Mode-specific validation checks to ensure logical login/signup boundaries
+    if (mode === 'login') {
+      const userExists = await User.findOne({ email: normalizedEmail });
+      if (!userExists) {
+        return NextResponse.json({ error: 'এই ইমেইল দিয়ে কোনো অ্যাকাউন্ট পাওয়া যায়নি। অনুগ্রহ করে আগে নতুন অ্যাকাউন্ট তৈরি (সাইন-আপ) করুন।' }, { status: 400 });
+      }
+    } else if (mode === 'signup') {
+      const userExists = await User.findOne({ email: normalizedEmail });
+      if (userExists) {
+        return NextResponse.json({ error: 'এই ইমেইল দিয়ে ইতিমধ্যেই একটি অ্যাকাউন্ট তৈরি করা আছে। অনুগ্রহ করে লগইন করুন।' }, { status: 400 });
+      }
+    }
 
     // Generate a secure, 6-digit random code
     const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -78,7 +92,11 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('Send OTP error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    console.error('Send OTP error detailed:', error);
+    return NextResponse.json({ 
+      error: 'Internal Server Error', 
+      details: error.message || String(error),
+      stack: error.stack
+    }, { status: 500 });
   }
 }

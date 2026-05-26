@@ -5,8 +5,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #3b2a60; /* Luxury Velvet Main Body */
-  --foreground: #f8fafc;
+  --background: #f8fafc; /* Premium Warm Alabaster Off-white */
+  --foreground: #0f172a; /* Slate 900 Navy text */
 }
 
 body {
@@ -16,21 +16,21 @@ body {
   overflow-x: hidden;
 }
 
-/* Custom premium ambient lighting backgrounds (Luxury Lavender glowing fields) */
+/* Custom premium ambient lighting backgrounds (Soft Gold and Blue glowing fields) */
 .bg-radial-glow {
-  background: radial-gradient(circle 800px at 50% -250px, rgba(211, 197, 246, 0.15), transparent 80%);
+  background: radial-gradient(circle 800px at 50% -250px, rgba(245, 158, 11, 0.08), transparent 80%);
 }
 
 .bg-radial-purple-glow {
-  background: radial-gradient(circle 600px at 100% 400px, rgba(211, 197, 246, 0.08), transparent 80%);
+  background: radial-gradient(circle 600px at 100% 400px, rgba(59, 130, 246, 0.05), transparent 80%);
 }
 
-/* Glassmorphism panels */
+/* Glassmorphism panels (White Card Theme) */
 .glass-panel {
-  background: rgba(25, 18, 41, 0.7); /* Velvet dark container */
+  background: rgba(255, 255, 255, 0.85); /* Premium light glass card */
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 10px 40px -10px rgba(15, 23, 42, 0.08);
 }
 
 .glass-panel-hover {
@@ -38,48 +38,112 @@ body {
 }
 
 .glass-panel-hover:hover {
-  background: rgba(35, 26, 58, 0.85);
-  border-color: rgba(211, 197, 246, 0.35); /* Lavender border */
-  box-shadow: 0 16px 48px 0 rgba(211, 197, 246, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(59, 130, 246, 0.25); /* Blue highlight border */
+  box-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.12);
   transform: translateY(-2px);
 }
 
-/* Glassy input controls */
+/* Glassy input controls (Light Theme) */
 .glass-input {
-  background: rgba(25, 18, 41, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  color: #fff;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
   transition: all 0.3s ease;
 }
 
 .glass-input:focus {
-  border-color: rgba(211, 197, 246, 0.5); /* Lavender focus */
-  box-shadow: 0 0 0 2px rgba(211, 197, 246, 0.15);
+  border-color: #3b82f6; /* Blue focus */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
   outline: none;
 }
 
-/* Custom premium scrollbar (Velvet and Lavender styling) */
+/* Custom premium scrollbar (Light Blue/Slate) */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #2a1d47;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #735fa3;
+  background: #cbd5e1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #d3c5f6; /* Lavender scrollbar highlight */
+  background: #94a3b8;
 }
 
 /* Text selections */
 ::selection {
-  background-color: rgba(211, 197, 246, 0.3);
-  color: #fff;
+  background-color: rgba(59, 130, 246, 0.15);
+  color: #0f172a;
+}
+
+/* =======================================================
+   🛡️ BRAND REBRANDING HELPER OVERRIDES (AUTOMATED ADAPTABILITY)
+   ======================================================= */
+
+/* Force warm off-white background everywhere bg-velvet / bg-dark-950 is used */
+.bg-velvet {
+  background-color: #f8fafc !important;
+}
+
+.bg-dark-950 {
+  background-color: #f1f5f9 !important; /* Soft Slate-100 */
+}
+
+.bg-dark-900 {
+  background-color: #ffffff !important; /* Pure White */
+}
+
+/* Overrides for text contrast */
+.text-slate-100 {
+  color: #0f172a !important; /* Slate-900 */
+}
+
+.text-slate-200 {
+  color: #1e293b !important; /* Slate-800 */
+}
+
+.text-slate-300 {
+  color: #334155 !important; /* Slate-700 */
+}
+
+.text-slate-400 {
+  color: #475569 !important; /* Slate-600 */
+}
+
+.text-slate-500 {
+  color: #64748b !important; /* Slate-500 */
+}
+
+.text-white\/40 {
+  color: #475569 !important;
+}
+
+.text-white\/50 {
+  color: #334155 !important;
+}
+
+/* Borders adaptability */
+.border-white\/5 {
+  border-color: rgba(15, 23, 42, 0.06) !important;
+}
+
+.border-white\/10 {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Buttons and navigation adaptability */
+.hover\:bg-white\/5:hover {
+  background-color: rgba(15, 23, 42, 0.04) !important;
+}
+
+.bg-white\/5 {
+  background-color: rgba(15, 23, 42, 0.04) !important;
 }
 
 /* 3D Book Mockup Perspective System */
