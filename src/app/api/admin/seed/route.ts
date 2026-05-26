@@ -6,7 +6,7 @@ const BOOKS_TO_SEED = [
   {
     _id: "60c72b2f9b1d8a23c4d5e6f1",
     title: "ইউআই/ইউএক্স ডিজাইন গাইড",
-    author: "গ্রন্থী পাবলিশার্স",
+    author: "বিহান পাবলিশার্স",
     description: "পেশাদার ইউজার ইন্টারফেস ডিজাইন, ভিজ্যুয়াল আর্ট সিস্টেম এবং আধুনিক ডিজাইন নিয়মের সম্পূর্ণ প্র্যাক্টিক্যাল গাইড বুক।",
     price: 250,
     coverImage: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800",

@@ -46,7 +46,7 @@ export async function GET(
       const mockBooks: Record<string, any> = {
         "60c72b2f9b1d8a23c4d5e6f1": {
           title: "UI/UX Design Guide",
-          author: "Gronthi Publishers",
+          author: "BIHAN Publishers",
           pageCount: 320,
           previewLimit: 4
         },
@@ -102,7 +102,7 @@ export async function GET(
 
       const book = mockBooks[bookId] || {
         title: "Secured Premium Guide",
-        author: "Gronthi Publishers",
+        author: "BIHAN Publishers",
         pageCount: 100,
         previewLimit: 4
       };

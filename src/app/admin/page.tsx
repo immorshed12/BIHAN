@@ -27,7 +27,7 @@ export default function AdminDashboard() {
   const [catPageCount, setCatPageCount] = useState(150);
   const [catPreviewLimit, setCatPreviewLimit] = useState(4);
   const [catCategory, setCatCategory] = useState('ডিজাইন');
-  const [catDescription, setCatDescription] = useState('গ্রন্থী পাবলিশার্স ডিজিটাল প্রিমিয়াম লার্নিং গাইড বুক।');
+  const [catDescription, setCatDescription] = useState('বিহান পাবলিশার্স ডিজিটাল প্রিমিয়াম লার্নিং গাইড বুক।');
   const [catSubmitting, setCatSubmitting] = useState(false);
 
   // New Premium Upgrades State
@@ -324,7 +324,7 @@ export default function AdminDashboard() {
     setCatPageCount(book.pageCount);
     setCatPreviewLimit(book.previewLimit || 4);
     setCatCategory(book.category || 'ডিজাইন');
-    setCatDescription(book.description || 'গ্রন্থী পাবলিশার্স ডিজিটাল প্রিমিয়াম লার্নিং গাইড বুক।');
+    setCatDescription(book.description || 'বিহান পাবলিশার্স ডিজিটাল প্রিমিয়াম লার্নিং গাইড বুক।');
     
     // Scroll form to view
     const formElement = document.getElementById('catalog-form-container');
@@ -377,7 +377,7 @@ export default function AdminDashboard() {
       setCatPageCount(150);
       setCatPreviewLimit(4);
       setCatCategory('ডিজাইন');
-      setCatDescription('গ্রন্থী পাবলিশার্স ডিজিটাল প্রিমিয়াম লার্নিং গাইড বুক।');
+      setCatDescription('বিহান পাবলিশার্স ডিজিটাল প্রিমিয়াম লার্নিং গাইড বুক।');
       setIsFree(false);
       setEditingBookId(null);
 
@@ -496,12 +496,12 @@ export default function AdminDashboard() {
   // 100% Airtight Security Enforcer Guard
   if (!user || user.role !== 'admin' || user.email !== 'immorshed068@gmail.com') {
     return (
-      <main className="min-h-screen bg-radial-glow bg-dark-950 text-slate-100 flex items-center justify-center py-12 px-4 select-none">
-        <div className="w-full max-w-lg glass-panel border border-rose-500/30 bg-rose-500/10 p-8 rounded-3xl flex flex-col gap-4 text-center items-center shadow-2xl shadow-rose-950/20 animate-fade-in font-sans">
+      <main className="min-h-screen bg-slate-50 text-slate-900 flex items-center justify-center py-12 px-4 select-none">
+        <div className="w-full max-w-lg bg-white border border-rose-200/80 p-8 rounded-3xl flex flex-col gap-4 text-center items-center shadow-2xl shadow-rose-100 animate-fade-in font-sans">
           <span className="text-4xl animate-pulse">🚫</span>
-          <h3 className="text-xl font-black text-rose-400 font-serif">অননুমোদিত অ্যাক্সেস (Unauthorized)</h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            আপনার চলমান সেশনটিতে গ্রন্থী অ্যাডমিন প্যানেল পরিচালনার অনুমতি নেই। ক্যাটালগ পরিচালনা করতে হোমপেজে ফিরে গিয়ে <strong className="text-slate-200">immorshed068@gmail.com</strong> ইমেইলটি দিয়ে ওটিপি লগইন করুন।
+          <h3 className="text-xl font-black text-rose-600 font-serif">অননুমোদিত অ্যাক্সেস (Unauthorized)</h3>
+          <p className="text-xs text-slate-500 leading-relaxed font-sans">
+            আপনার চলমান সেশনটিতে বিহান অ্যাডমিন প্যানেল পরিচালনার অনুমতি নেই। ক্যাটালগ পরিচালনা করতে হোমপেজে ফিরে গিয়ে <strong className="text-rose-600 font-bold">immorshed068@gmail.com</strong> ইমেইলটি দিয়ে ওটিপি লগইন করুন।
           </p>
           <button 
             onClick={async () => {
@@ -511,7 +511,7 @@ export default function AdminDashboard() {
               logout();
               window.location.href = '/';
             }}
-            className="w-fit px-6 py-3 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white rounded-xl text-xs font-black transition duration-200 cursor-pointer shadow-md shadow-rose-500/10 animate-pulse"
+            className="w-fit px-6 py-3 bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white rounded-xl text-xs font-black transition duration-200 cursor-pointer shadow-md shadow-rose-500/10 animate-pulse"
           >
             হোমপেজে যান
           </button>
@@ -940,7 +940,7 @@ export default function AdminDashboard() {
                             setCatPageCount(150);
                             setCatPreviewLimit(4);
                             setCatCategory('ডিজাইন');
-                            setCatDescription('গ্রন্থী পাবলিশার্স ডিজিটাল প্রিমিয়াম লার্নিং গাইড বুক।');
+                            setCatDescription('বিহান পাবলিশার্স ডিজিটাল প্রিমিয়াম লার্নিং গাইড বুক।');
                             setIsFree(false);
                           }}
                           className="text-[9px] bg-amber-500/20 hover:bg-amber-500 text-slate-900 font-black px-2.5 py-0.5 rounded transition cursor-pointer"
@@ -978,7 +978,7 @@ export default function AdminDashboard() {
                           maxLength={50}
                           value={catAuthor}
                           onChange={(e) => setCatAuthor(e.target.value)}
-                          placeholder="উদা. গ্রন্থী পাবলিশার্স"
+                          placeholder="উদা. বিহান পাবলিশার্স"
                           className="w-full glass-input px-3.5 py-2.5 rounded-xl text-xs"
                         />
                       </div>
@@ -1205,7 +1205,7 @@ export default function AdminDashboard() {
                           required
                           value={couponCode}
                           onChange={(e) => setCouponCode(e.target.value)}
-                          placeholder="উদা. GRONTHI50"
+                          placeholder="উদা. BIHAN50"
                           className="w-full glass-input px-3.5 py-2.5 rounded-xl text-xs font-mono uppercase font-black tracking-widest text-center"
                         />
                       </div>
@@ -1332,7 +1332,7 @@ export default function AdminDashboard() {
                           </div>
                           <div className="flex flex-col min-w-0 text-left">
                             <h4 className="text-xs font-black text-slate-200 truncate max-w-[200px]">{b.title}</h4>
-                            <span className="text-[9px] text-slate-500 font-semibold mt-0.5">{catalogBook?.author || 'গ্রন্থী গাইড'}</span>
+                            <span className="text-[9px] text-slate-500 font-semibold mt-0.5">{catalogBook?.author || 'বিহান গাইড'}</span>
                           </div>
                         </div>
 

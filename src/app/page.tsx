@@ -11,7 +11,7 @@ const BANGLA_BOOKS = [
   {
     id: "60c72b2f9b1d8a23c4d5e6f1",
     title: "ইউআই/ইউএক্স ডিজাইন গাইড",
-    author: "গ্রন্থী পাবলিশার্স",
+    author: "বিহান পাবলিশার্স",
     description: "পেশাদার ইউজার ইন্টারফেস ডিজাইন, ভিজ্যুয়াল আর্ট সিস্টেম এবং আধুনিক ডিজাইন নিয়মের সম্পূর্ণ প্র্যাক্টিক্যাল গাইড বুক।",
     price: 250,
     rating: 4.9,
@@ -210,8 +210,6 @@ export default function Home() {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
-
-
 
   const handleBookAction = (bookId: string) => {
     const targetBook = books.find(b => b._id === bookId || b.id === bookId);
@@ -438,7 +436,7 @@ export default function Home() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-user-email': user?.email || 'customer@gronthi.com',
+          'x-user-email': user?.email || 'customer@bihan.com',
         },
         body: JSON.stringify({
           bookId: checkoutBook?._id || checkoutBook?.id,
@@ -469,27 +467,27 @@ export default function Home() {
   return (
     <>
       {isAdminPreview && (
-        <div className="w-full bg-gradient-to-r from-[#501c3e]/90 via-[#201140]/90 to-[#501c3e]/90 border-b border-lavender/30 text-slate-200 py-3 text-center text-xs font-sans font-bold flex items-center justify-center gap-3 backdrop-blur-md sticky top-0 z-[100] select-none shadow-lg">
+        <div className="w-full bg-gradient-to-r from-slate-800 via-slate-900 to-slate-800 border-b border-slate-700 text-slate-200 py-3 text-center text-xs font-sans font-bold flex items-center justify-center gap-3 backdrop-blur-md sticky top-0 z-[100] select-none shadow-lg">
           <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-lavender animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
             🛡️ <strong>এডমিন ইউজার ভিউ মোড:</strong> গ্রাহকরা যেভাবে স্টোরফ্রন্ট দেখবে, আপনিও সেভাবেই দেখছেন।
           </span>
           <Link 
             href="/admin" 
-            className="px-3.5 py-1 bg-lavender text-velvet rounded-xl font-black transition-all duration-200 hover:bg-white hover:text-velvet hover:shadow-lg shadow shadow-lavender/10"
+            className="px-3.5 py-1 bg-amber-500 text-white rounded-xl font-black transition-all duration-200 hover:bg-amber-600 hover:shadow-lg shadow shadow-amber-500/10"
           >
             এডমিন প্যানেলে ফিরে যান →
           </Link>
         </div>
       )}
-      <main className="min-h-screen bg-radial-glow bg-velvet text-slate-100 flex flex-col items-center pb-24 relative overflow-hidden font-sans">
+      <main className="min-h-screen bg-radial-glow bg-slate-50 text-slate-900 flex flex-col items-center pb-24 relative overflow-hidden font-sans">
       <div className="absolute inset-0 bg-radial-purple-glow opacity-30 pointer-events-none" />
-      <div className="absolute w-[600px] h-[600px] rounded-full bg-lavender/5 blur-[120px] top-[-300px] left-[50%] -translate-x-[50%] pointer-events-none" />
+      <div className="absolute w-[600px] h-[600px] rounded-full bg-amber-500/5 blur-[120px] top-[-300px] left-[50%] -translate-x-[50%] pointer-events-none" />
 
       <div className="w-full max-w-6xl z-10 px-4 md:px-8 flex flex-col gap-16">
         
         {/* Sleek Minimalist Bangla Header */}
-        <nav className="w-full py-6 flex items-center justify-between border-b border-white/5 relative z-20">
+        <nav className="w-full py-6 flex items-center justify-between border-b border-slate-200 relative z-20">
           <Link href="/" className="flex items-center select-none cursor-pointer -my-4">
             <img 
               src="/logo.png" 
@@ -499,14 +497,14 @@ export default function Home() {
           </Link>
 
           {/* FIX 1: FULLY FUNCTIONAL NAVIGATION ANCHORS WITH SMOOTH SCROLLING */}
-          <div className="hidden md:flex items-center gap-1.5 bg-dark-900/50 border border-white/5 px-4 py-1.5 rounded-full backdrop-blur-md">
+          <div className="hidden md:flex items-center gap-1.5 bg-white border border-slate-200 px-4 py-1.5 rounded-full shadow-sm">
             <a 
               href="#premium-catalog"
               onClick={(e) => {
                 e.preventDefault();
                 scrollToSection('premium-catalog');
               }}
-              className="px-4 py-1.5 text-xs font-black text-slate-200 hover:bg-white/5 rounded-full transition cursor-pointer select-none"
+              className="px-4 py-1.5 text-xs font-black text-slate-700 hover:bg-slate-50 rounded-full transition cursor-pointer select-none"
             >
               লাইব্রেরি
             </a>
@@ -516,7 +514,7 @@ export default function Home() {
                 e.preventDefault();
                 scrollToSection('premium-catalog');
               }}
-              className="text-xs font-extrabold text-slate-400 px-3 py-1.5 hover:text-slate-200 transition cursor-pointer select-none"
+              className="text-xs font-extrabold text-slate-500 px-3 py-1.5 hover:text-slate-700 transition cursor-pointer select-none"
             >
               ক্যাটাগরি
             </a>
@@ -526,7 +524,7 @@ export default function Home() {
                 e.preventDefault();
                 scrollToSection('free-catalog');
               }}
-              className="text-xs font-extrabold text-slate-400 px-3 py-1.5 hover:text-slate-200 transition cursor-pointer select-none"
+              className="text-xs font-extrabold text-slate-500 px-3 py-1.5 hover:text-slate-700 transition cursor-pointer select-none"
             >
               নতুন বই
             </a>
@@ -538,20 +536,20 @@ export default function Home() {
               // Authenticated user controls
               <div className="flex items-center gap-3">
                 <div className="flex flex-col items-end text-right select-none">
-                  <span className="text-xs font-black text-slate-200">{user.name}</span>
-                  <span className={`text-[9px] font-bold uppercase tracking-wider ${user.role === 'admin' ? 'text-primary-400' : 'text-emerald-400'}`}>
+                  <span className="text-xs font-black text-slate-800">{user.name}</span>
+                  <span className={`text-[9px] font-bold uppercase tracking-wider ${user.role === 'admin' ? 'text-amber-600' : 'text-emerald-600'}`}>
                     {user.role === 'admin' ? 'অ্যাডমিন অ্যাকাউন্ট' : 'সদস্য'}
                   </span>
                 </div>
                 <Link
                   href={isAdminPreview ? "/library?view=user" : "/library"}
-                  className="px-4 py-2 border border-white/10 bg-white/5 hover:bg-white/10 rounded-full text-xs font-black transition duration-200"
+                  className="px-4 py-2 border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-full text-xs font-black transition duration-200"
                 >
                   প্রোফাইল
                 </Link>
                 <button 
                   onClick={handleLogout}
-                  className="px-4 py-2 border border-white/10 bg-white/5 hover:bg-rose-500/10 hover:border-rose-500/30 hover:text-rose-400 rounded-full text-xs font-black transition duration-200 cursor-pointer"
+                  className="px-4 py-2 border border-slate-200 bg-slate-50 hover:bg-rose-500/10 hover:border-rose-500/30 hover:text-rose-600 text-slate-700 rounded-full text-xs font-black transition duration-200 cursor-pointer"
                 >
                   লগআউট
                 </button>
@@ -565,7 +563,7 @@ export default function Home() {
                   setAuthName('');
                   setIsAuthModalOpen(true);
                 }}
-                className="px-5 py-2.5 border border-lavender/25 bg-lavender/5 hover:bg-lavender hover:text-velvet text-lavender rounded-full text-xs font-black transition duration-300 shadow-md shadow-lavender/5 cursor-pointer"
+                className="px-5 py-2.5 border border-amber-200 bg-amber-50 hover:bg-amber-500 hover:text-white text-amber-600 rounded-full text-xs font-black transition duration-300 shadow-md shadow-amber-500/5 cursor-pointer"
               >
                 লগইন / সাইন-আপ
               </button>
@@ -576,37 +574,37 @@ export default function Home() {
         {/* Hero Section */}
         <section className="w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center py-6">
           <div className="flex flex-col gap-6 text-left">
-            <span className="text-[11px] font-black text-lavender uppercase tracking-widest flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-lavender animate-ping" />
+            <span className="text-[11px] font-black text-amber-600 uppercase tracking-widest flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" />
               আজকের নির্বাচিত প্রিমিয়াম গাইড
             </span>
             <div className="flex flex-col gap-4">
-              <h2 className="text-lg md:text-xl font-bold text-slate-300 tracking-wide">
+              <h2 className="text-lg md:text-xl font-bold text-slate-700 tracking-wide">
                 Explore the Digital Frontier.
               </h2>
               <h1 className="text-3xl lg:text-[44px] font-extrabold tracking-normal leading-[1.25] bg-gradient-to-r from-slate-900 via-slate-800 to-amber-600 bg-clip-text text-transparent font-serif">
                 আপনার প্রয়োজনীয় সব প্রিমিয়াম পিডিএফ ও ডিজিটাল গাইড এক জায়গায়।
               </h1>
             </div>
-            <p className="text-slate-400 text-sm leading-relaxed max-w-md">
+            <p className="text-slate-600 text-sm leading-relaxed max-w-md">
               কোনো লুকানো চার্জ ছাড়াই সরাসরি বিকাশ বা নগদে পেমেন্ট করুন এবং তাৎক্ষণিক ডাউনলোড করে নিন।
             </p>
 
             <div className="flex flex-wrap items-center gap-4 mt-2">
               <button 
                 onClick={() => handleBookAction("60c72b2f9b1d8a23c4d5e6f1")}
-                className="px-8 py-3 bg-gradient-to-r from-velvet/85 to-[#4e3a7a] hover:from-[#4e3a7a] hover:to-[#5d4692] text-lavender border border-lavender/30 font-bold rounded-2xl transition duration-300 text-sm shadow-lg shadow-lavender/10 flex items-center gap-2"
+                className="px-8 py-3 bg-amber-50 hover:bg-amber-500 text-amber-600 hover:text-white border border-amber-200 font-bold rounded-2xl transition duration-300 text-sm shadow-lg shadow-amber-500/5 flex items-center gap-2"
               >
                 পড়ুন এবং আনলক করুন
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 text-lavender">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 text-amber-600">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                 </svg>
               </button>
 
-              <div className="flex items-center gap-1.5 ml-6 bg-white/5 border border-white/5 px-3 py-1.5 rounded-full select-none">
-                <span className="w-2.5 h-1 bg-primary-400 rounded-full" />
-                <span className="w-1.5 h-1.5 bg-slate-600 rounded-full" />
-                <span className="w-1.5 h-1.5 bg-slate-600 rounded-full" />
+              <div className="flex items-center gap-1.5 ml-6 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-full select-none">
+                <span className="w-2.5 h-1 bg-amber-500 rounded-full" />
+                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full" />
+                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full" />
               </div>
             </div>
           </div>
@@ -614,27 +612,27 @@ export default function Home() {
           {/* Featured Book */}
           <div className="flex justify-center md:justify-end book-perspective">
             <div className="relative group book-mockup-hover">
-              <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-primary-500 to-indigo-700 opacity-20 blur-2xl group-hover:opacity-35 transition duration-500" />
+              <div className="absolute -inset-2 rounded-3xl bg-gradient-to-tr from-amber-500 to-amber-600 opacity-20 blur-2xl group-hover:opacity-35 transition duration-500" />
               
-              <div className="relative w-64 h-80 rounded-2xl book-mockup border border-white/10 shadow-2xl flex items-center justify-center p-1 bg-gradient-to-br from-indigo-950/40 via-dark-950 to-dark-950">
+              <div className="relative w-64 h-80 rounded-2xl book-mockup border border-slate-200 shadow-2xl flex items-center justify-center p-1 bg-gradient-to-br from-slate-100 to-slate-200">
                 <div className="absolute top-1 bottom-1 -right-[4px] w-[6px] bg-slate-100 rounded-r shadow" />
                 <div className="absolute top-2 bottom-2 -right-[7px] w-[4px] bg-slate-50 rounded-r shadow-sm" />
 
-                <div className="absolute top-0 bottom-0 -left-[18px] w-[18px] bg-gradient-to-r from-cyan-900 to-indigo-950 rounded-l origin-right -rotate-y-[85deg] shadow-lg flex flex-col justify-between py-6 items-center text-[9px] text-white/50 font-black tracking-widest">
+                <div className="absolute top-0 bottom-0 -left-[18px] w-[18px] bg-gradient-to-r from-slate-200 to-slate-300 rounded-l origin-right -rotate-y-[85deg] shadow-lg flex flex-col justify-between py-6 items-center text-[9px] text-slate-500 font-black tracking-widest">
                   <span>PDF</span>
-                  <span className="uppercase rotate-180 writing-mode-vertical">GRONTHI</span>
+                  <span className="uppercase rotate-180 writing-mode-vertical">BIHAN</span>
                 </div>
 
-                <div className="w-full h-full rounded-r-xl overflow-hidden bg-gradient-to-br from-cyan-950 via-indigo-950 to-dark-950 flex flex-col justify-between p-6 relative">
+                <div className="w-full h-full rounded-r-xl overflow-hidden bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 flex flex-col justify-between p-6 relative">
                   <div className="absolute top-0 left-0 right-0 h-[150%] bg-gradient-to-b from-white/5 via-transparent to-transparent -skew-y-[45deg] origin-top-left pointer-events-none" />
 
                   <div className="flex justify-between items-start z-10">
-                    <span className="text-[10px] font-black uppercase bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-2.5 py-0.5 rounded shadow">প্রিমিয়াম গাইড</span>
-                    <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
+                    <span className="text-[10px] font-black uppercase bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2.5 py-0.5 rounded shadow">প্রিমিয়াম গাইড</span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
                   </div>
 
                   <div className="flex flex-col gap-2 text-left z-10">
-                    <span className="text-[9px] text-cyan-400 font-extrabold uppercase tracking-widest font-mono">গ্রন্থী পাবলিশার্স</span>
+                    <span className="text-[9px] text-amber-400 font-extrabold uppercase tracking-widest font-mono">বিহান পাবলিশার্স</span>
                     <h3 className="text-xl font-black text-white leading-tight font-serif select-none">
                       ইউআই/ইউএক্স ডিজাইন গাইড
                     </h3>
@@ -654,34 +652,34 @@ export default function Home() {
         </section>
 
         {/* Dynamic Search & Category Filters Widget */}
-        <section className="glass-panel p-6 rounded-3xl border border-white/5 bg-dark-900/40 backdrop-blur-xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl mt-4 select-none">
+        <section className="glass-panel p-6 rounded-3xl border border-slate-200 bg-white/95 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md mt-4 select-none">
           {/* Fuzzy Search Field */}
           <div className="relative w-full md:max-w-md">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm">🔍</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm">🔍</span>
             <input 
               type="text"
               placeholder="বইয়ের নাম, লেখক বা বিবরণ দিয়ে খুঁজুন..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-velvet/40 border border-white/10 rounded-2xl text-xs font-semibold focus:border-lavender text-slate-200 placeholder:text-slate-500 transition duration-300 outline-none"
+              className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-semibold focus:border-amber-500 text-slate-800 placeholder:text-slate-400 transition duration-300 outline-none"
             />
             {searchQuery && (
               <button 
                 onClick={() => setSearchQuery('')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 text-xs transition"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs transition"
               >
                 ✕
               </button>
             )}
           </div>
 
-          {/* Glassmorphic Category Dropdown Filter */}
+          {/* Category Dropdown Filter */}
           <div className="relative w-full md:w-auto md:min-w-[220px]">
-            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-lavender text-sm z-10">▾</div>
+            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-amber-600 text-sm z-10">▾</div>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full appearance-none pl-9 pr-5 py-3 bg-velvet/50 border border-lavender/20 hover:border-lavender/50 rounded-2xl text-xs font-black text-slate-200 focus:outline-none focus:border-lavender focus:ring-2 focus:ring-lavender/15 transition duration-300 cursor-pointer shadow-lg shadow-lavender/5 backdrop-blur-md"
+              className="w-full appearance-none pl-9 pr-5 py-3 bg-white border border-slate-200 hover:border-slate-300 rounded-2xl text-xs font-black text-slate-800 focus:outline-none focus:border-amber-500 cursor-pointer shadow-md shadow-slate-100"
               style={{ backgroundImage: 'none' }}
             >
               {getUniqueCategories().map((cat) => (
@@ -697,7 +695,7 @@ export default function Home() {
             {selectedCategory !== 'All' && (
               <button
                 onClick={() => setSelectedCategory('All')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-lavender/20 hover:bg-lavender/40 text-lavender text-[10px] flex items-center justify-center transition duration-200 z-10"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 text-[10px] flex items-center justify-center transition duration-200 z-10"
                 title="ফিল্টার মুছুন"
               >
                 ✕
@@ -709,11 +707,11 @@ export default function Home() {
         {/* Premium Products Category List */}
         <section id="premium-catalog" className="flex flex-col gap-8 mt-6">
           <div className="flex flex-col gap-1.5 text-left">
-            <h2 className="text-2xl font-black tracking-tight text-lavender font-serif flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-sm bg-lavender" />
+            <h2 className="text-2xl font-black tracking-tight text-amber-600 font-serif flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-sm bg-amber-500" />
               প্রিমিয়াম গাইডসমূহ
             </h2>
-            <p className="text-xs text-slate-500 max-w-lg">
+            <p className="text-xs text-slate-600 max-w-lg">
               বিকাশ বা নগদে পেমেন্ট করার কয়েক সেকেন্ডের মধ্যে অটোমেটিকালি আনলক হয়ে যাবে।
             </p>
           </div>
@@ -721,7 +719,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {booksLoading ? (
               <div className="col-span-full py-16 flex items-center justify-center">
-                <div className="w-10 h-10 border-4 border-lavender/20 border-t-lavender rounded-full animate-spin" />
+                <div className="w-10 h-10 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
               </div>
             ) : books.map(b => ({
                 id: b._id,
@@ -743,7 +741,7 @@ export default function Home() {
                 const matchesCategory = selectedCategory === 'All' || book.category === selectedCategory;
                 return matchesSearch && matchesCategory && !book.isFree;
               }).length === 0 ? (
-                <div className="col-span-full py-12 text-center text-slate-500 border border-dashed border-white/10 rounded-2xl">
+                <div className="col-span-full py-12 text-center text-slate-600 border border-dashed border-slate-200 rounded-2xl">
                   কোনো প্রিমিয়াম বই খুঁজে পাওয়া যায়নি।
                 </div>
               ) : books.map(b => ({
@@ -779,11 +777,11 @@ export default function Home() {
         {/* Free Products Category List */}
         <section id="free-catalog" className="flex flex-col gap-8 mt-6">
           <div className="flex flex-col gap-1.5 text-left">
-            <h2 className="text-2xl font-black tracking-tight text-slate-100 font-serif flex items-center gap-2">
+            <h2 className="text-2xl font-black tracking-tight text-emerald-600 font-serif flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500" />
               ফ্রি রিসোর্স ও গাইড
             </h2>
-            <p className="text-xs text-slate-500 max-w-lg">
+            <p className="text-xs text-slate-600 max-w-lg">
               কোনো পেমেন্ট ছাড়াই সরাসরি অ্যাকাউন্ট ইমেইলে ফ্রি ডাউনলোড করে নিন।
             </p>
           </div>
@@ -791,7 +789,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {booksLoading ? (
               <div className="col-span-full py-16 flex items-center justify-center">
-                <div className="w-10 h-10 border-4 border-lavender/20 border-t-lavender rounded-full animate-spin" />
+                <div className="w-10 h-10 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin" />
               </div>
             ) : books.map(b => ({
                 id: b._id,
@@ -813,7 +811,7 @@ export default function Home() {
                 const matchesCategory = selectedCategory === 'All' || book.category === selectedCategory;
                 return matchesSearch && matchesCategory && book.isFree;
               }).length === 0 ? (
-                <div className="col-span-full py-12 text-center text-slate-500 border border-dashed border-white/10 rounded-2xl">
+                <div className="col-span-full py-12 text-center text-slate-600 border border-dashed border-slate-200 rounded-2xl">
                   কোনো ফ্রি রিসোর্স খুঁজে পাওয়া যায়নি।
                 </div>
               ) : books.map(b => ({
@@ -863,7 +861,7 @@ export default function Home() {
                 setAuthStep('email');
                 setAuthError('');
               }}
-              className="absolute inset-0 bg-velvet/80 backdrop-blur-md"
+              className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm"
             />
 
             {/* Modal Body Container with backdrop-blur glassmorphism */}
@@ -871,15 +869,15 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="w-full max-w-md bg-dark-900/60 border border-white/10 rounded-3xl relative z-10 overflow-hidden shadow-2xl backdrop-blur-2xl p-6 flex flex-col gap-6 text-left"
+              className="w-full max-w-md bg-white border border-slate-200 shadow-2xl rounded-3xl relative z-10 overflow-hidden p-6 flex flex-col gap-6 text-left"
             >
-              <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-primary-500 to-indigo-600 shadow-[0_2px_20px_rgba(225,29,72,0.4)]" />
+              <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-500 to-amber-600 shadow-[0_2px_20px_rgba(245,158,11,0.2)]" />
 
               {/* Header */}
               <div className="flex justify-between items-start">
                 <div className="flex flex-col gap-0.5 select-none">
-                  <span className="text-[10px] font-black text-primary-400 uppercase tracking-widest">গ্রন্থী সিকিউর গেটওয়ে</span>
-                  <h3 className="text-xl font-extrabold text-slate-100 font-serif">
+                  <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest">বিহান সিকিউর গেটওয়ে</span>
+                  <h3 className="text-xl font-extrabold text-slate-900 font-serif">
                     {authMode === 'login' ? 'অ্যাকাউন্টে লগইন করুন' : 'নতুন অ্যাকাউন্ট তৈরি করুন'}
                   </h3>
                 </div>
@@ -889,7 +887,7 @@ export default function Home() {
                     setAuthStep('email');
                     setAuthError('');
                   }}
-                  className="w-8 h-8 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-white transition cursor-pointer select-none"
+                  className="w-8 h-8 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-700 transition cursor-pointer select-none"
                 >
                   ✕
                 </button>
@@ -898,7 +896,7 @@ export default function Home() {
               {/* 1. Stylish Google SSO Trigger (Main Focus) */}
               <button 
                 onClick={handleGoogleAuth}
-                className="w-full py-3.5 bg-white hover:bg-slate-100 text-slate-950 font-black rounded-2xl transition duration-300 flex items-center justify-center gap-2.5 shadow-lg shadow-white/5 text-xs cursor-pointer select-none border border-slate-200"
+                className="w-full py-3.5 bg-white hover:bg-slate-100 text-slate-950 font-black rounded-2xl transition duration-300 flex items-center justify-center gap-2.5 shadow-md shadow-slate-100 text-xs cursor-pointer select-none border border-slate-200"
               >
                 {/* Google Icon SVG */}
                 <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
@@ -912,14 +910,14 @@ export default function Home() {
 
               {/* 2. Horizontal Divider Line */}
               <div className="flex items-center gap-3 py-1">
-                <div className="flex-grow h-px bg-white/10" />
+                <div className="flex-grow h-px bg-slate-200" />
                 <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest select-none">অথবা</span>
-                <div className="flex-grow h-px bg-white/10" />
+                <div className="flex-grow h-px bg-slate-200" />
               </div>
 
               {/* Error Box */}
               {authError && (
-                <div className="text-xs text-rose-400 font-bold bg-rose-500/10 border border-rose-500/20 px-4 py-2.5 rounded-xl">
+                <div className="text-xs text-rose-600 font-bold bg-rose-50 border border-rose-200 px-4 py-2.5 rounded-xl">
                   {authError}
                 </div>
               )}
@@ -930,34 +928,34 @@ export default function Home() {
                   
                   {authMode === 'signup' && (
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] uppercase font-bold tracking-wider text-slate-400 select-none">আপনার নাম</label>
+                      <label className="text-[10px] uppercase font-bold tracking-wider text-slate-500 select-none">আপনাদের নাম</label>
                       <input 
                         type="text"
                         required
                         placeholder="উদা. সোহেল রানা"
                         value={authName}
                         onChange={(e) => setAuthName(e.target.value)}
-                        className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-semibold focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20"
+                        className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-semibold focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                       />
                     </div>
                   )}
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] uppercase font-bold tracking-wider text-slate-400 select-none">আপনার ইমেইল ঠিকানা দিন</label>
+                    <label className="text-[10px] uppercase font-bold tracking-wider text-slate-500 select-none">আপনার ইমেইল ঠিকানা দিন</label>
                     <input 
                       type="email"
                       required
                       placeholder="you@example.com"
                       value={authEmail}
                       onChange={(e) => setAuthEmail(e.target.value)}
-                      className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-mono font-medium focus:border-primary-500 focus:ring-1 focus:ring-primary-500/20"
+                      className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-mono font-medium focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={authSubmitting}
-                    className="w-full py-3.5 bg-gradient-to-r from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 text-white font-black text-xs rounded-2xl transition duration-300 shadow-lg shadow-primary-500/15 flex items-center justify-center gap-2 cursor-pointer select-none"
+                    className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-black text-xs rounded-2xl transition duration-300 shadow-lg shadow-amber-500/10 flex items-center justify-center gap-2 cursor-pointer select-none"
                   >
                     {authSubmitting ? (
                       <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
@@ -974,12 +972,12 @@ export default function Home() {
               ) : (
                 /* 3. OTP Code Input */
                 <form onSubmit={handleAuthOtpSubmit} className="flex flex-col gap-4 font-sans">
-                  <div className="p-3 bg-lavender/5 border border-lavender/10 text-[11px] text-slate-300 rounded-xl leading-relaxed">
-                    আমরা আপনার <strong className="text-lavender font-mono">{authEmail}</strong> ইমেইলে একটি ভেরিফিকেশন ওটিপি (OTP) কোড পাঠিয়েছি। ওটিপিটি নিচে ইনপুট করুন। (মেইলটি না পেলে অনুগ্রহ করে আপনার ইনবক্স ও স্প্যাম ফোল্ডার চেক করুন)
+                  <div className="p-3 bg-amber-50 border border-amber-200/60 text-[11px] text-slate-700 rounded-xl leading-relaxed">
+                    আমরা আপনার <strong className="text-amber-600 font-mono">{authEmail}</strong> ইমেইলে একটি ভেরিফিকেশন ওটিপি (OTP) কোড পাঠিয়েছি। ওটিপিটি নিচে ইনপুট করুন। (মেইলটি না পেলে অনুগ্রহ করে আপনার ইনবক্স ও স্প্যাম ফোল্ডার চেক করুন)
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] uppercase font-bold tracking-wider text-slate-400 select-none">৬-ডিজিটের ভেরিফিকেশন ওটিপি (OTP)</label>
+                    <label className="text-[10px] uppercase font-bold tracking-wider text-slate-500 select-none">৬-ডিজিটের ভেরিফিকেশন ওটিপি (OTP)</label>
                     <input 
                       type="text"
                       required
@@ -987,7 +985,7 @@ export default function Home() {
                       placeholder="উদা. 123456"
                       value={authOtp}
                       onChange={(e) => setAuthOtp(e.target.value)}
-                      className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-mono font-bold tracking-widest text-center focus:border-primary-500"
+                      className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-mono font-bold tracking-widest text-center focus:border-amber-500"
                     />
                   </div>
 
@@ -998,14 +996,14 @@ export default function Home() {
                         setAuthStep('email');
                         setAuthError('');
                       }}
-                      className="py-3 border border-white/10 hover:bg-white/5 text-slate-300 font-bold text-xs rounded-2xl transition text-center cursor-pointer"
+                      className="py-3 border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-2xl transition text-center cursor-pointer"
                     >
                       ইমেইল পরিবর্তন করুন
                     </button>
                     <button
                       type="submit"
                       disabled={authSubmitting}
-                      className="py-3 bg-gradient-to-r from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 text-white font-black text-xs rounded-2xl transition duration-300 shadow-lg shadow-primary-500/15 flex items-center justify-center"
+                      className="py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-black text-xs rounded-2xl transition duration-300 shadow-lg shadow-amber-500/10 flex items-center justify-center"
                     >
                       {authSubmitting ? (
                         <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
@@ -1017,20 +1015,20 @@ export default function Home() {
 
               {/* 4. Auth toggle buttons */}
               {authStep === 'email' && (
-                <div className="text-center mt-1 border-t border-white/5 pt-4">
+                <div className="text-center mt-1 border-t border-slate-200 pt-4">
                   {authMode === 'login' ? (
                     <button 
                       onClick={() => setAuthMode('signup')}
-                      className="text-xs font-bold text-slate-400 hover:text-primary-400 transition cursor-pointer select-none"
+                      className="text-xs font-bold text-slate-500 hover:text-amber-600 transition cursor-pointer select-none"
                     >
-                      নতুন অ্যাকাউন্ট তৈরি করতে চান? <span className="underline decoration-primary-500/50 underline-offset-2 hover:decoration-primary-400">এখানে ক্লিক করুন</span>
+                      নতুন অ্যাকাউন্ট তৈরি করতে চান? <span className="underline decoration-amber-500/50 underline-offset-2 hover:decoration-amber-600">এখানে ক্লিক করুন</span>
                     </button>
                   ) : (
                     <button 
                       onClick={() => setAuthMode('login')}
-                      className="text-xs font-bold text-slate-400 hover:text-primary-400 transition cursor-pointer select-none"
+                      className="text-xs font-bold text-slate-500 hover:text-amber-600 transition cursor-pointer select-none"
                     >
-                      ইতিমধ্যে অ্যাকাউন্ট আছে? <span className="underline select-none underline-offset-2 decoration-primary-500/50 hover:decoration-primary-400">লগইন করুন</span>
+                      ইতিমধ্যে অ্যাকাউন্ট আছে? <span className="underline select-none underline-offset-2 decoration-amber-500/50 hover:decoration-amber-600">লগইন করুন</span>
                     </button>
                   )}
                 </div>
@@ -1050,7 +1048,7 @@ export default function Home() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsCheckoutOpen(false)}
-              className="absolute inset-0 bg-velvet/60 backdrop-blur-md"
+              className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm"
             />
 
             <motion.div 
@@ -1058,17 +1056,17 @@ export default function Home() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="w-full max-w-md h-full bg-dark-900/90 border-l border-white/5 p-6 flex flex-col justify-between relative shadow-2xl z-10 backdrop-blur-2xl text-left"
+              className="w-full max-w-md h-full bg-white border-l border-slate-200 p-6 flex flex-col justify-between relative shadow-2xl z-10 text-left"
             >
               
-              <div className="flex justify-between items-center border-b border-white/5 pb-4">
+              <div className="flex justify-between items-center border-b border-slate-200 pb-4">
                 <div className="flex flex-col">
-                  <h3 className="text-lg font-black text-slate-100 font-serif">চেকআউট (Checkout)</h3>
-                  <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">গ্রন্থী সিকিউর পেমেন্ট গেটওয়ে</span>
+                  <h3 className="text-lg font-black text-slate-900 font-serif">চেকআউট (Checkout)</h3>
+                  <span className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">বিহান সিকিউর পেমেন্ট গেটওয়ে</span>
                 </div>
                 <button 
                   onClick={() => setIsCheckoutOpen(false)}
-                  className="w-8 h-8 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-white transition"
+                  className="w-8 h-8 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-700 transition"
                 >
                   ✕
                 </button>
@@ -1076,35 +1074,35 @@ export default function Home() {
 
               <div className="flex-grow overflow-y-auto py-6 flex flex-col gap-6 scroll-smooth pr-1">
                 
-                <div className="glass-panel p-4 rounded-2xl border border-lavender/5 flex gap-4 items-center bg-velvet/40">
-                  <div className="w-12 h-16 rounded bg-gradient-to-br from-velvet to-dark-950 border border-lavender/10 flex-shrink-0 flex items-center justify-center relative overflow-hidden">
-                    <span className="text-[7px] text-white/50 font-bold uppercase truncate px-1 text-center select-none font-serif">{checkoutBook.title}</span>
+                <div className="glass-panel p-4 rounded-2xl border border-slate-200 flex gap-4 items-center bg-slate-50 shadow-inner shadow-slate-100/50">
+                  <div className="w-12 h-16 rounded bg-gradient-to-br from-slate-100 to-slate-200 border border-slate-300 flex-shrink-0 flex items-center justify-center relative overflow-hidden">
+                    <span className="text-[7px] text-slate-600 font-bold uppercase truncate px-1 text-center select-none font-serif">{checkoutBook.title}</span>
                   </div>
                   <div className="flex-grow flex flex-col min-w-0">
-                    <span className="text-[8px] font-bold text-lavender uppercase tracking-widest">{checkoutBook.author}</span>
-                    <h4 className="text-sm font-bold text-slate-100 truncate">{checkoutBook.title}</h4>
+                    <span className="text-[8px] font-bold text-amber-600 uppercase tracking-widest">{checkoutBook.author}</span>
+                    <h4 className="text-sm font-bold text-slate-800 truncate">{checkoutBook.title}</h4>
                     <span className="text-xs text-slate-500">{checkoutBook.pageCount} পৃষ্ঠা</span>
                   </div>
-                  <span className="text-sm font-black text-slate-200 flex-shrink-0">৳ {checkoutBook.price}</span>
+                  <span className="text-sm font-black text-slate-900 flex-shrink-0">৳ {checkoutBook.price}</span>
                 </div>
 
-                <div className="flex justify-between items-center border-t border-b border-lavender/5 py-3.5">
-                  <span className="text-sm text-slate-400 font-semibold">সর্বমোট প্রদেয় মূল্য:</span>
-                  <span className="text-lg font-black text-white font-mono">৳ {checkoutBook.price}.00</span>
+                <div className="flex justify-between items-center border-t border-b border-slate-200 py-3.5">
+                  <span className="text-sm text-slate-500 font-semibold">সর্বমোট প্রদেয় মূল্য:</span>
+                  <span className="text-lg font-black text-slate-900 font-mono">৳ {checkoutBook.price}.00</span>
                 </div>
 
                 {submitSuccess ? (
                   <motion.div 
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="flex flex-col items-center justify-center text-center py-6 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-6"
+                    className="flex flex-col items-center justify-center text-center py-6 bg-emerald-50 border border-emerald-200/80 rounded-2xl p-6"
                   >
-                    <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mb-3 animate-bounce">
+                    <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-600 flex items-center justify-center mb-3 animate-bounce">
                       ✓
                     </div>
-                    <h4 className="text-base font-black text-slate-100 font-serif">ট্রানজেকশন সফলভাবে জমা হয়েছে!</h4>
-                    <p className="text-xs text-slate-400 leading-relaxed mt-2">
-                      আপনার জমাকৃত TxID: <strong className="text-lavender font-mono select-all">{txId}</strong> আমাদের অটোমেটেড গেটওয়েতে ভেরিফিকেশন করা হচ্ছে। ভেরিফিকেশন শেষ হলে কয়েক সেকেন্ডের মধ্যে বইটি লাইব্রেরিতে আনলক হয়ে যাবে।
+                    <h4 className="text-base font-black text-slate-900 font-serif">ট্রানজেকশন সফলভাবে জমা হয়েছে!</h4>
+                    <p className="text-xs text-slate-600 leading-relaxed mt-2">
+                      আপনার জমাকৃত TxID: <strong className="text-amber-600 font-mono select-all">{txId}</strong> আমাদের অটোমেটেড গেটওয়েতে ভেরিফিকেশন করা হচ্ছে। ভেরিফিকেশন শেষ হলে কয়েক সেকেন্ডের মধ্যে বইটি লাইব্রেরিতে আনলক হয়ে যাবে।
                     </p>
                     <button 
                       onClick={() => {
@@ -1119,11 +1117,11 @@ export default function Home() {
                 ) : (
                   <div className="flex flex-col gap-6">
                     
-                    <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-300 leading-relaxed flex items-start gap-2.5">
+                    <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-[11px] text-amber-800 leading-relaxed flex items-start gap-2.5">
                       <span className="text-base">⚠️</span>
                       <div>
-                        <strong className="font-extrabold block text-amber-200 mb-0.5">গুরুত্বपूर्ण পেমেন্ট সতর্কবার্তা:</strong>
-                        আপনাকে অবশ্যই বিকাশ বা নগদের <strong className="text-slate-100 underline decoration-amber-400 underline-offset-2">"Send Money (টাকা পাঠান)"</strong> অপশনটি ব্যবহার করতে হবে। রিচার্জ (Recharge), ক্যাশ-ইন (Cash-In) বা মার্চেন্ট পেমেন্ট (Merchant Payment) করলে গেটওয়ে তা গ্রহণ করবে না এবং অ্যাক্সেস রিজেক্ট হয়ে যাবে।
+                        <strong className="font-extrabold block text-amber-800 mb-0.5">গুরুত্বপূর্ণ পেমেন্ট সতর্কবার্তা:</strong>
+                        আপনাকে অবশ্যই বিকাশ বা নগদের <strong className="text-slate-900 font-extrabold underline decoration-amber-500 underline-offset-2">"Send Money (টাকা পাঠান)"</strong> অপশনটি ব্যবহার করতে হবে। রিচার্জ (Recharge), ক্যাশ-ইন (Cash-In) বা মার্চেন্ট পেমেন্ট (Merchant Payment) করলে গেটওয়ে তা গ্রহণ করবে না এবং অ্যাক্সেস রিজেক্ট হয়ে যাবে।
                       </div>
                     </div>
 
@@ -1135,8 +1133,8 @@ export default function Home() {
                           onClick={() => setPaymentGateway('bkash')}
                           className={`flex items-center justify-center gap-2 py-3 rounded-2xl border text-xs font-black transition duration-300 ${
                             paymentGateway === 'bkash'
-                              ? 'bg-pink-500/10 border-pink-500 text-pink-400'
-                              : 'border-lavender/5 bg-lavender/5 text-slate-400 hover:bg-lavender/10'
+                              ? 'bg-pink-500/10 border-pink-500 text-pink-500 shadow-sm'
+                              : 'border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100'
                           }`}
                         >
                           <span className="w-2 h-2 rounded-full bg-pink-500" />
@@ -1147,8 +1145,8 @@ export default function Home() {
                           onClick={() => setPaymentGateway('nagad')}
                           className={`flex items-center justify-center gap-2 py-3 rounded-2xl border text-xs font-black transition duration-300 ${
                             paymentGateway === 'nagad'
-                              ? 'bg-orange-500/10 border-orange-500 text-orange-400'
-                              : 'border-lavender/5 bg-lavender/5 text-slate-400 hover:bg-lavender/10'
+                              ? 'bg-orange-500/10 border-orange-500 text-orange-500 shadow-sm'
+                              : 'border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100'
                           }`}
                         >
                           <span className="w-2 h-2 rounded-full bg-orange-500" />
@@ -1157,19 +1155,19 @@ export default function Home() {
                       </div>
                     </div>
 
-                    <div className="glass-panel p-4 rounded-2xl border border-lavender/5 text-xs text-slate-400 flex flex-col gap-2 bg-velvet/20 leading-relaxed font-sans">
-                      <div className="font-extrabold text-slate-300 border-b border-lavender/5 pb-1.5 mb-1 flex items-center justify-between">
+                    <div className="glass-panel p-4 rounded-2xl border border-slate-200 text-xs text-slate-600 flex flex-col gap-2 bg-slate-50 leading-relaxed font-sans">
+                      <div className="font-extrabold text-slate-700 border-b border-slate-200 pb-1.5 mb-1 flex items-center justify-between">
                         <span>পেমেন্ট নির্দেশনাবলী (Send Money)</span>
-                        <span className="text-lavender font-mono">৳ {checkoutBook.price}</span>
+                        <span className="text-amber-600 font-mono">৳ {checkoutBook.price}</span>
                       </div>
-                      <p>১. আপনার ওয়ালেট অ্যাপ থেকে <strong className="text-slate-200">Send Money</strong> সিলেক্ট করুন।</p>
+                      <p>১. আপনার ওয়ালেট অ্যাপ থেকে <strong className="text-slate-800">Send Money</strong> সিলেক্ট করুন।</p>
                       <p>
-                        ২. প্রাপক নম্বরে আমাদের ওয়ালেট নং দিন: <strong className="text-lavender select-all font-mono">
-                          {paymentGateway === 'bkash' ? '01712-XXXXXX' : '01912-XXXXXX'}
+                        ২. প্রাপক নম্বরে আমাদের ওয়ালেট নং দিন: <strong className="text-amber-600 select-all font-mono">
+                          01832984186
                         </strong>
                       </p>
-                      <p>৩. পরিমাণের ঘরে <strong className="text-slate-200">৳ {checkoutBook.price}</strong> লিখে পিন দিয়ে কনফার্ম করুন।</p>
-                      <p>৪. সফলভাবে পেমেন্ট করার পর ট্রানজেকশন আইডি (<strong className="text-slate-200">TrxID/TxID</strong>) নিচে বসান।</p>
+                      <p>৩. পরিমাণের ঘরে <strong className="text-slate-800">৳ {checkoutBook.price}</strong> লিখে পিন দিয়ে কনফার্ম করুন।</p>
+                      <p>৪. সফলভাবে পেমেন্ট করার পর ট্রানজেকশন আইডি (<strong className="text-slate-800">TrxID/TxID</strong>) নিচে বসান।</p>
                     </div>
 
                     <form onSubmit={handlePaymentSubmit} className="flex flex-col gap-4">
@@ -1182,7 +1180,7 @@ export default function Home() {
                           placeholder="উদা. ০১৭XXXXXXXX"
                           value={phoneNumber}
                           onChange={(e) => setPhoneNumber(e.target.value)}
-                          className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-mono font-medium focus:border-lavender"
+                          className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-mono font-medium focus:border-amber-500"
                         />
                       </div>
 
@@ -1194,12 +1192,12 @@ export default function Home() {
                           placeholder="উদা. 8A4B6C8D9E"
                           value={txId}
                           onChange={(e) => setTxId(e.target.value)}
-                          className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-mono uppercase font-black tracking-widest focus:border-lavender"
+                          className="w-full glass-input px-4 py-3 rounded-2xl text-xs font-mono uppercase font-black tracking-widest focus:border-amber-500"
                         />
                       </div>
 
                       {submitError && (
-                        <div className="text-xs text-rose-400 font-bold bg-rose-500/10 border border-rose-500/20 px-4 py-2.5 rounded-xl">
+                        <div className="text-xs text-rose-600 bg-rose-50 border border-rose-200 px-4 py-2.5 rounded-xl">
                           {submitError}
                         </div>
                       )}
@@ -1223,7 +1221,7 @@ export default function Home() {
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
-                            পেমেন্ট নিশ্চিত করুন
+                            پেমেন্ট নিশ্চিত করুন
                           </>
                         )}
                       </button>
@@ -1248,25 +1246,25 @@ export default function Home() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsFreeModalOpen(false)}
-              className="absolute inset-0 bg-velvet/80 backdrop-blur-md"
+              className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm"
             />
 
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="w-full max-w-md glass-panel rounded-3xl relative z-10 overflow-hidden shadow-2xl border border-lavender/10 p-6 flex flex-col gap-6 text-left"
+              className="w-full max-w-md bg-white border border-slate-200 shadow-2xl rounded-3xl relative z-10 overflow-hidden p-6 flex flex-col gap-6 text-left"
             >
               <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-emerald-500 to-teal-600" />
 
               <div className="flex justify-between items-start">
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[10px] font-black text-emerald-400 uppercase tracking-wider font-sans">রিসোর্স ফাইল ডাউনলোড</span>
-                  <h3 className="text-xl font-black text-slate-100 font-serif">ফ্রি গাইড বুক ডাউনলোড করুন</h3>
+                  <span className="text-[10px] font-black text-emerald-600 uppercase tracking-wider font-sans">রিসোর্স ফাইল ডাউনলোড</span>
+                  <h3 className="text-xl font-black text-slate-900 font-serif">ফ্রি গাইড বুক ডাউনলোড করুন</h3>
                 </div>
                 <button 
                   onClick={() => setIsFreeModalOpen(false)}
-                  className="w-8 h-8 rounded-full border border-lavender/10 bg-lavender/5 hover:bg-lavender/10 flex items-center justify-center text-slate-400 hover:text-white transition cursor-pointer"
+                  className="w-8 h-8 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-700 transition cursor-pointer"
                 >
                   ✕
                 </button>
@@ -1274,7 +1272,7 @@ export default function Home() {
 
               {freeStep === 'email' && (
                 <div className="flex flex-col gap-4">
-                  <p className="text-xs text-slate-400 leading-relaxed font-sans bg-lavender/5 border border-lavender/5 p-4 rounded-xl">
+                  <p className="text-xs text-slate-600 leading-relaxed font-sans bg-slate-50 border border-slate-200 p-4 rounded-xl">
                     নিচের ইনপুট বক্সে আপনার সচল ইমেইল অ্যাড্রেসটি লিখুন। স্প্যাম অ্যাকাউন্ট প্রতিরোধ করতে আপনার ইমেইলে একটি ভেরিফিকেশন ওটিপি (OTP) পাঠানো হবে।
                   </p>
                   <form onSubmit={handleFreeEmailSubmit} className="flex flex-col gap-4">
@@ -1315,8 +1313,8 @@ export default function Home() {
 
               {freeStep === 'otp' && (
                 <div className="flex flex-col gap-4">
-                  <div className="p-3.5 rounded-xl bg-lavender/10 border border-lavender/20 text-xs text-lavender leading-relaxed font-sans">
-                    আমরা আপনার <strong className="text-slate-100">{freeEmail}</strong> ইমেইলে একটি ভেরিফিকেশন ওটিপি (OTP) কোড পাঠিয়েছি। ওটিপিটি নিচে ইনপুট করুন। (মেইলটি না পেলে অনুগ্রহ করে আপনার ইনবক্স ও স্প্যাম ফোল্ডার চেক করুন)
+                  <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 leading-relaxed font-sans">
+                    আমরা আপনার <strong className="text-slate-800">{freeEmail}</strong> ইমেইলে একটি ভেরিফিকেশন ওটিপি (OTP) কোড পাঠিয়েছি। ওটিপিটি নিচে ইনপুট করুন। (মেইলটি না পেলে অনুগ্রহ করে আপনার ইনবক্স ও স্প্যাম ফোল্ডার চেক করুন)
                   </div>
                   <form onSubmit={handleFreeOtpSubmit} className="flex flex-col gap-4 font-sans">
                     <div className="flex flex-col gap-1.5">
@@ -1333,7 +1331,7 @@ export default function Home() {
                     </div>
 
                     {freeError && (
-                      <div className="text-xs text-rose-400 font-bold bg-rose-500/10 border border-rose-500/20 px-4 py-2.5 rounded-xl">
+                      <div className="text-xs text-rose-600 font-bold bg-rose-50 border border-rose-200 px-4 py-2.5 rounded-xl">
                         {freeError}
                       </div>
                     )}
@@ -1342,7 +1340,7 @@ export default function Home() {
                       <button
                         type="button"
                         onClick={() => setFreeStep('email')}
-                        className="py-3.5 border border-lavender/10 hover:bg-lavender/5 text-slate-300 font-bold text-xs rounded-2xl transition text-center"
+                        className="py-3.5 border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-2xl transition text-center"
                       >
                         পুনরায় ইমেইল দিন
                       </button>
@@ -1362,12 +1360,12 @@ export default function Home() {
 
               {freeStep === 'success' && (
                 <div className="flex flex-col items-center justify-center text-center py-4 gap-3">
-                  <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center animate-bounce">
+                  <div className="w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-600 flex items-center justify-center animate-bounce">
                     ✓
                   </div>
-                  <h4 className="text-base font-black text-slate-200 font-serif">আপনার ইমেইলে পিডিএফ পাঠানো হয়েছে!</h4>
-                  <p className="text-xs text-slate-400 leading-relaxed font-sans">
-                    আমরা <strong className="text-emerald-400 font-mono select-all">{freeEmail}</strong> ঠিকানায় <strong>{freeBook.title}</strong> বইটির ডাউনলোড লিংক পাঠিয়ে দিয়েছি। অনুগ্রহ করে আপনার ইনবক্স চেক করুন।
+                  <h4 className="text-base font-black text-slate-800 font-serif">আপনার ইমেইলে পিডিএফ পাঠানো হয়েছে!</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                    আমরা <strong className="text-emerald-600 font-mono select-all">{freeEmail}</strong> ঠিকানায় <strong>{freeBook.title}</strong> বইটির ডাউনলোড লিংক পাঠিয়ে দিয়েছি। অনুগ্রহ করে আপনার ইনবক্স চেক করুন।
                   </p>
                   <button
                     onClick={() => setIsFreeModalOpen(false)}
@@ -1382,7 +1380,6 @@ export default function Home() {
           </div>
         )}
       </AnimatePresence>
-
 
     </main>
     <Footer />

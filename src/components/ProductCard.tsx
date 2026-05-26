@@ -42,30 +42,30 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
     cardRef.current.style.setProperty('--ry', '0deg');
   };
 
-  // Define cover backgrounds based on titles/colors
+  // Define cover backgrounds based on titles/colors (beautiful rebranded light-theme vibrant tones)
   const getCoverGradient = () => {
     const bookIdStr = book.id || book._id;
     switch (bookIdStr) {
       case "60c72b2f9b1d8a23c4d5e6f1": // UI/UX Guide
-        return "from-cyan-900 via-indigo-950 to-dark-950";
+        return "from-cyan-600 to-indigo-700";
       case "60c72b2f9b1d8a23c4d5e6f2": // Art techniques
-        return "from-fuchsia-950 via-purple-950 to-dark-950";
+        return "from-fuchsia-600 to-purple-700";
       case "60c72b2f9b1d8a23c4d5e6f3": // Typography
-        return "from-slate-900 via-zinc-950 to-dark-950";
+        return "from-slate-700 to-zinc-850";
       case "60c72b2f9b1d8a23c4d5e6f4": // Creator's handbook
-        return "from-teal-950 via-slate-950 to-dark-950";
+        return "from-teal-600 to-slate-700";
       case "60c72b2f9b1d8a23c4d5e6f5": // Responsive design
-        return "from-sky-950 via-emerald-950 to-dark-950";
+        return "from-sky-600 to-emerald-700";
       case "60c72b2f9b1d8a23c4d5e6f6": // Tuntunir Boi
-        return "from-emerald-950 via-teal-950 to-dark-950";
+        return "from-emerald-600 to-teal-700";
       case "60c72b2f9b1d8a23c4d5e6f7": // Abol Tabol
-        return "from-amber-950 via-rose-950 to-dark-950";
+        return "from-amber-600 to-rose-700";
       case "60c72b2f9b1d8a23c4d5e6f8": // Thakurmar Jhuli
-        return "from-indigo-950 via-violet-950 to-dark-950";
+        return "from-indigo-600 to-violet-700";
       case "60c72b2f9b1d8a23c4d5e6f9": // HaJaBaRaLa
-        return "from-pink-950 via-purple-950 to-dark-950";
+        return "from-pink-600 to-purple-700";
       default:
-        return "from-primary-950 via-dark-900 to-dark-950";
+        return "from-amber-500 via-amber-600 to-amber-700";
     }
   };
 
@@ -81,23 +81,23 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
         transform: 'perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))',
         transformStyle: 'preserve-3d',
       }}
-      className={`glass-panel rounded-3xl p-6 flex flex-col justify-between gap-6 relative transition-all duration-100 ${
+      className={`bg-white border rounded-3xl p-6 flex flex-col justify-between gap-6 relative transition-all duration-100 ${
         book.isFree 
-          ? 'border-emerald-500/10 hover:border-emerald-500/30 shadow-emerald-950/5' 
-          : 'border-white/5 hover:border-lavender/35 hover:shadow-[0_0_25px_rgba(211,197,246,0.18)] shadow-black/40'
+          ? 'border-emerald-200 hover:border-emerald-500/30 shadow-md shadow-emerald-50' 
+          : 'border-slate-200 hover:border-amber-500/30 shadow-md hover:shadow-lg shadow-slate-100'
       } book-perspective book-mockup-hover group`}
     >
       {/* 3D Tilted floating physical book cover */}
-      <div className="w-full h-56 rounded-2xl relative overflow-hidden bg-dark-950/30 border border-white/5 flex items-center justify-center py-2">
+      <div className="w-full h-56 rounded-2xl relative overflow-hidden bg-slate-50 border border-slate-200/80 flex items-center justify-center py-2">
         
         {/* Book Container with 3D Rotation */}
         <div className="relative w-36 h-48 book-mockup transition-transform duration-500 ease-out">
           
           {/* Glowing outer shadow layer */}
-          <div className={`absolute -inset-1 rounded-r-xl blur-lg opacity-40 group-hover:opacity-60 transition duration-300 ${
+          <div className={`absolute -inset-1 rounded-r-xl blur-lg opacity-35 group-hover:opacity-55 transition duration-300 ${
             book.isFree 
-              ? 'bg-emerald-500/20' 
-              : 'bg-lavender/25'
+              ? 'bg-emerald-500/10' 
+              : 'bg-amber-500/10'
           }`} />
 
           {/* Paper Edge layers (Inside Pages) */}
@@ -107,11 +107,11 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
           {/* Left Spine (Physical Thickness) */}
           <div className={`absolute top-0 bottom-0 -left-[14px] w-[14px] bg-gradient-to-r ${
             book.isFree 
-              ? 'from-emerald-900 to-emerald-950' 
-              : 'from-velvet to-dark-900'
-          } rounded-l origin-right -rotate-y-[85deg] shadow-lg flex flex-col justify-between py-4 items-center text-[7px] text-white/40 font-mono font-black tracking-widest select-none`}>
+              ? 'from-emerald-700 to-emerald-800' 
+              : 'from-amber-600 to-amber-700'
+          } rounded-l origin-right -rotate-y-[85deg] shadow-lg flex flex-col justify-between py-4 items-center text-[7px] text-white/50 font-mono font-black tracking-widest select-none`}>
             <span>PDF</span>
-            <span className="uppercase rotate-180 writing-mode-vertical">GRONTHI</span>
+            <span className="uppercase rotate-180 writing-mode-vertical">BIHAN</span>
           </div>
 
           {/* Front Book Cover Graphic */}
@@ -133,9 +133,9 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
             {/* Custom Icon/Badge based on books */}
             <div className="flex justify-between items-start z-10">
               <span className={`text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded tracking-wider ${
-                book.isFree ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-lavender/10 text-lavender border border-lavender/20'
+                book.isFree ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-amber-50 text-amber-600 border border-amber-200'
               }`}>
-                {book.isFree ? 'ফ্রি' : 'প্রিমিয়াম'}
+                {book.isFree ? 'ফ্রি' : 'প্রিমিয়াম'}
               </span>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5 text-white/40">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
@@ -144,7 +144,7 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
 
             {/* Beautiful Title Typography inside the book cover */}
             <div className="flex flex-col gap-1.5 text-left z-10">
-              <span className="text-[7px] text-white/50 tracking-wider font-semibold uppercase">{book.author}</span>
+              <span className="text-[7px] text-white/60 tracking-wider font-semibold uppercase">{book.author}</span>
               <h4 className="text-xs font-black text-white leading-tight font-serif select-none line-clamp-3">
                 {book.title}
               </h4>
@@ -152,8 +152,8 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
 
             {/* Floating details inside cover */}
             <div className="flex justify-between items-end border-t border-white/5 pt-1.5 z-10">
-              <span className="text-[7px] text-white/30 font-mono">1.0.0</span>
-              <span className="text-[8px] font-black text-white/70">
+              <span className="text-[7px] text-white/40 font-mono">1.0.0</span>
+              <span className="text-[8px] font-black text-white">
                 {book.isFree ? '৳ ০' : `৳ ${book.price}`}
               </span>
             </div>
@@ -163,7 +163,7 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
 
         {/* Free Floating Badge */}
         {book.isFree && (
-          <div className="absolute top-3 left-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-lg backdrop-blur-md">
+          <div className="absolute top-3 left-3 bg-emerald-50 border border-emerald-250/70 text-emerald-600 text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-md backdrop-blur-md">
             ফ্রি
           </div>
         )}
@@ -175,27 +175,27 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
           <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
             {book.author}
           </span>
-          <span className="text-xs font-bold text-amber-400 flex items-center gap-1">
+          <span className="text-xs font-bold text-amber-500 flex items-center gap-1">
             ★ {book.rating}
           </span>
         </div>
         
-        <h3 className="text-lg font-black text-slate-100 group-hover:text-lavender transition-colors duration-200 line-clamp-1">
+        <h3 className="text-lg font-black text-slate-800 group-hover:text-amber-600 transition-colors duration-200 line-clamp-1 font-serif">
           {book.title}
         </h3>
         
-        <p className="text-[11px] text-slate-400 leading-tight line-clamp-2 h-7">
+        <p className="text-[11px] text-slate-500 leading-tight line-clamp-2 h-7 font-sans">
           {book.description}
         </p>
       </div>
 
       {/* Pricing and Action Footer */}
-      <div className="flex items-center justify-between border-t border-white/5 pt-4 mt-2">
+      <div className="flex items-center justify-between border-t border-slate-200 pt-4 mt-2">
         <div className="flex flex-col">
           <span className="text-[9px] uppercase tracking-wider text-slate-500 font-semibold">মূল্য</span>
-          <span className="text-lg font-black text-slate-100">
+          <span className="text-lg font-black text-slate-800">
             {book.isFree ? (
-              <span className="text-emerald-400">৳ ০.০০</span>
+              <span className="text-emerald-600 font-bold">৳ ০.০০</span>
             ) : (
               <span>৳ {book.price}</span>
             )}
@@ -205,7 +205,7 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
         {book.isFree ? (
           <button
             onClick={() => onAction(book.id || book._id || '')}
-            className="px-5 py-2.5 bg-emerald-500/10 hover:bg-emerald-500 border border-emerald-500/30 hover:border-emerald-500 text-emerald-400 hover:text-slate-950 text-xs font-black rounded-xl transition duration-300 shadow-md shadow-emerald-500/5 flex items-center gap-1.5"
+            className="px-5 py-2.5 bg-emerald-50 hover:bg-emerald-600 border border-emerald-200 text-emerald-600 hover:text-white text-xs font-black rounded-xl transition duration-300 shadow-sm flex items-center gap-1.5 cursor-pointer"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -215,9 +215,9 @@ export default function ProductCard({ book, onAction }: ProductCardProps) {
         ) : (
           <button
             onClick={() => onAction(book.id || book._id || '')}
-            className="px-5 py-2.5 bg-gradient-to-r from-velvet/50 to-[#4e3a7a] hover:from-[#4e3a7a] hover:to-[#5d4692] text-lavender border border-lavender/20 text-xs font-black rounded-xl transition duration-300 shadow-md shadow-lavender/5 flex items-center gap-1.5"
+            className="px-5 py-2.5 bg-amber-50 hover:bg-amber-500 text-amber-600 hover:text-white border border-amber-200 text-xs font-black rounded-xl transition duration-300 shadow-sm flex items-center gap-1.5 cursor-pointer"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 text-lavender">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
             </svg>
             পড়ুন এবং আনলক করুন

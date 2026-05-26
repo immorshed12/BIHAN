@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'বিহান BIHAN — বাংলাদেশের প্রিমিয়াম ডিজিটাল বুক স্টোর',
     description: 'প্রিমিয়াম পিডিএফ গাইড ও ই-বুক। বিকাশ ও নগদে সহজ পেমেন্ট, তাৎক্ষণিক অ্যাক্সেস।',
-    url: 'https://gronthi.vercel.app',
+    url: 'https://bihan-store.vercel.app',
     siteName: 'বিহান (BIHAN)',
     locale: 'bn_BD',
     type: 'website',

@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
       { upsert: true, new: true }
     );
 
-    // Print to server terminal/logs in all environments so developer/tester can access it instantly!
+    // Print to server terminal/logs in all environments
     console.log(`\n========================================\n[OTP AUTH] Verification code for ${normalizedEmail}: ${code}\n========================================\n`);
 
     // Attempt to send actual email if SMTP credentials are configured
@@ -63,15 +63,15 @@ export async function POST(req: NextRequest) {
         });
 
         const mailOptions = {
-          from: `"গ্রন্থী (Gronthi)" <${smtpUser}>`,
+          from: `"বিহান (BIHAN)" <${smtpUser}>`,
           to: normalizedEmail,
-          subject: 'গ্রন্থী সাইন-ইন ভেরিফিকেশন কোড',
+          subject: 'বিহান সাইন-ইন ভেরিফিকেশন কোড',
           html: `
-            <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 500px; margin: auto; padding: 30px; border: 1px solid #eee; border-radius: 20px; background-color: #3b2a60; color: #ffffff; text-align: center;">
-              <h2 style="color: #d3c5f6; font-size: 24px; margin-bottom: 20px; font-weight: 800;">গ্রন্থী (Gronthi)</h2>
-              <p style="font-size: 15px; color: #e2e8f0; line-height: 1.6;">আপনার অ্যাকাউন্টটি সুরক্ষিতভাবে লগইন বা সাইন-আপ করতে নিচের ভেরিফিকেশন কোডটি ব্যবহার করুন:</p>
-              <div style="background-color: #d3c5f6; color: #3b2a60; font-size: 32px; font-weight: 900; letter-spacing: 6px; padding: 15px 30px; border-radius: 12px; display: inline-block; margin: 25px 0;">${code}</div>
-              <p style="font-size: 12px; color: #a0aec0; margin-top: 20px;">এই ওটিপি কোডটির মেয়াদ মাত্র ৫ মিনিট থাকবে। কাউকে এই কোডটি শেয়ার করবেন না।</p>
+            <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 500px; margin: auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 20px; background-color: #f8fafc; color: #1e293b; text-align: center;">
+              <h2 style="color: #d97706; font-size: 24px; margin-bottom: 20px; font-weight: 800;">বিহান (BIHAN)</h2>
+              <p style="font-size: 15px; color: #334155; line-height: 1.6;">আপনার অ্যাকাউন্টটি সুরক্ষিতভাবে লগইন বা সাইন-আপ করতে নিচের ভেরিফিকেশন কোডটি ব্যবহার করুন:</p>
+              <div style="background-color: #fef3c7; color: #b45309; font-size: 32px; font-weight: 900; letter-spacing: 6px; padding: 15px 30px; border-radius: 12px; display: inline-block; margin: 25px 0; border: 1px solid #fde68a;">${code}</div>
+              <p style="font-size: 12px; color: #64748b; margin-top: 20px;">এই ওটিপি কোডটির মেয়াদ মাত্র ৫ মিনিট থাকবে। কাউকে এই কোডটি শেয়ার করবেন না।</p>
             </div>
           `,
         };
@@ -87,7 +87,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       message: 'Verification code generated successfully',
-      // Include the code in response in non-production environments to enhance DX
       devCode: process.env.NODE_ENV !== 'production' ? code : undefined
     });
 

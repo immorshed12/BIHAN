@@ -9,7 +9,6 @@ if (typeof window !== 'undefined') {
   pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 }
 
-
 interface PDFViewerProps {
   bookId: string;
   totalPageCount: number;
@@ -59,7 +58,6 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
     if (lastPage && containerRef.current) {
       const pageInt = parseInt(lastPage, 10);
       if (pageInt > 1) {
-        // Trigger a premium custom prompt toast or small confirm dialog
         const confirmContinue = window.confirm(`আপনি কি সর্বশেষ পড়া পৃষ্ঠা ${pageInt} থেকে পড়া শুরু করতে চান?`);
         if (confirmContinue) {
           setTimeout(() => {
@@ -121,15 +119,14 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
       return;
     }
 
-    // Cancel active synthesis first
     window.speechSynthesis.cancel();
 
     // Fetch dynamic elements text details
-    const bookTitle = document.querySelector('h2')?.textContent || 'ইউআই/ইউএক্স গাইড';
-    const bookAuthor = document.querySelector('span.text-primary-400')?.textContent || 'গ্রন্থী প্রকাশনী';
-    const bookDesc = document.querySelector('p.text-slate-400')?.textContent || '';
+    const bookTitle = document.querySelector('h2')?.textContent || 'ডিজিটাল বুক গাইড';
+    const bookAuthor = document.querySelector('span.text-amber-600')?.textContent || 'বিহান প্রকাশনী';
+    const bookDesc = document.querySelector('p.text-slate-600')?.textContent || '';
 
-    const spokenIntroText = `গ্রন্থী আর্টিফিশিয়াল ইন্টেলিজেন্স বাংলা অডিওবুক রিডারে আপনাকে স্বাগতম। আপনি এখন শুনছেন ${bookAuthor} এর অসাধারণ জনপ্রিয় বই, ${bookTitle}। বইটির ভূমিকা ও সারসংক্ষেপ নিম্নরূপ: ${bookDesc}`;
+    const spokenIntroText = `বিহান আর্টিফিশিয়াল ইন্টেলিজেন্স বাংলা অডিওবুক রিডারে আপনাকে স্বাগতম। আপনি এখন শুনছেন ${bookAuthor} এর অসাধারণ জনপ্রিয় বই, ${bookTitle}। বইটির ভূমিকা ও সারসংক্ষেপ নিম্নরূপ: ${bookDesc}`;
 
     const utterance = new SpeechSynthesisUtterance(spokenIntroText);
     utterance.lang = 'bn-BD';
@@ -162,12 +159,11 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
     setIsTtsPaused(false);
   };
 
-  // Capture Bengali selected word for instant dictionary definition tooltip
+  // Capture Bengali selected word for definition tooltip
   const handleTextSelection = (e: React.MouseEvent) => {
     const selection = window.getSelection();
     if (selection) {
       const text = selection.toString().trim();
-      // Dictionary triggers only on single words (length between 2 to 15 characters)
       if (text && text.length >= 2 && text.length <= 15) {
         setSelectedWord(text);
         setDictionaryPosition({ x: e.clientX, y: e.clientY - 45 });
@@ -192,8 +188,8 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
     if (term.includes('বই') || term.includes('বইটি')) {
       return "গ্রন্থ বা পুস্তক - পৃষ্ঠা সংবলিত লিখিত বা মুদ্রিত সাহিত্য সম্ভার।";
     }
-    if (term.includes('গ্রন্থী')) {
-      return "গ্রন্থের বাঁধন বা সংযোগস্থল - আমাদের ডিজিটাল রিডিং প্ল্যাটফর্ম।";
+    if (term.includes('গ্রন্থী') || term.includes('বিহান')) {
+      return "বিহান (BIHAN) - আমাদের ডিজিটাল রিডিং প্ল্যাটফর্ম ও লাইব্রেরি লাউঞ্জ।";
     }
     if (term.includes('ঠাকুরমার')) {
       return "দাদী বা পিতামহী - রূপকথার গল্পের পরিচিত চরিত্র।";
@@ -201,7 +197,7 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
     if (term.includes('ডিজিটাল')) {
       return "ডিজিটাল প্রযুক্তি - বাইনারি ডেটা সিস্টেম ও ইলেকট্রনিক্স ভিত্তিক মাধ্যম।";
     }
-    return `"${word}" - গ্রন্থী অভিধান: শব্দার্থের আলোকপাত ও সাহিত্য প্রসঙ্গ সন্ধান।`;
+    return `"${word}" - বিহান অভিধান: শব্দার্থের আলোকপাত ও সাহিত্য প্রসঙ্গ সন্ধান।`;
   };
 
   const handleInlineSubmit = async (e: React.FormEvent) => {
@@ -219,7 +215,7 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-user-email': user?.email || 'customer@gronthi.com',
+          'x-user-email': user?.email || 'customer@bihan.com',
         },
         body: JSON.stringify({
           bookId,
@@ -248,24 +244,24 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
   return (
     <div className="w-full flex flex-col gap-4 relative" onMouseUp={handleTextSelection}>
       
-      {/* 🚀 Ultimate E-Reader Toolbar (Floating glassmorphism controls) */}
-      <div className="w-full glass-panel px-4 md:px-6 py-3 rounded-2xl border border-white/5 bg-dark-900/60 backdrop-blur-xl flex flex-wrap items-center justify-between gap-4 z-20 select-none">
+      {/* 🚀 Ultimate E-Reader Toolbar (Light-theme premium glassmorphism controls) */}
+      <div className="w-full bg-white border border-slate-200 shadow-md px-4 md:px-6 py-3 rounded-2xl flex flex-wrap items-center justify-between gap-4 z-20 select-none">
         
         {/* Left Side: Page counter & Bookmarks tracker */}
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-xl border border-white/5">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            <span className="text-xs text-slate-300 font-mono">
+          <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+            <span className="text-xs text-slate-700 font-mono font-bold">
               পৃষ্ঠা {currentViewPage} / {totalPageCount}
             </span>
           </div>
 
           <button
             onClick={() => toggleBookmark(currentViewPage)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border cursor-pointer ${
               bookmarks.includes(currentViewPage)
-                ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
-                : 'bg-white/5 border-white/5 text-slate-400 hover:text-slate-200'
+                ? 'bg-amber-50 border-amber-200 text-amber-600 font-bold shadow-sm'
+                : 'bg-slate-50 border-slate-200 text-slate-600 hover:text-slate-800'
             }`}
           >
             <span>{bookmarks.includes(currentViewPage) ? '★ বুকমার্কড' : '☆ বুকমার্ক'}</span>
@@ -273,14 +269,14 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
         </div>
 
         {/* Center: AI Bengali Audiobook Synthesizer Controls */}
-        <div className="flex items-center gap-2 bg-dark-950/40 border border-white/5 p-1 rounded-xl">
+        <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 p-1 rounded-xl shadow-inner">
           <span className="text-[10px] text-slate-500 font-black uppercase px-2 select-none">অডিওবুক</span>
           <button
             onClick={handlePlayTTS}
-            className={`w-8 h-8 rounded-lg flex items-center justify-center transition ${
+            className={`w-8 h-8 rounded-lg flex items-center justify-center transition cursor-pointer font-bold ${
               isTtsPlaying && !isTtsPaused
-                ? 'bg-cyan-500 text-slate-950'
-                : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                ? 'bg-amber-500 text-white shadow'
+                : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
             }`}
             title="প্লে অডিওবুক"
           >
@@ -290,8 +286,8 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
             <>
               <button
                 onClick={handlePauseTTS}
-                className={`w-8 h-8 rounded-lg flex items-center justify-center transition ${
-                  isTtsPaused ? 'bg-amber-500 text-slate-950' : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                className={`w-8 h-8 rounded-lg flex items-center justify-center transition cursor-pointer font-bold ${
+                  isTtsPaused ? 'bg-amber-400 text-slate-900 shadow' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
                 }`}
                 title="পজ অডিওবুক"
               >
@@ -299,7 +295,7 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
               </button>
               <button
                 onClick={handleStopTTS}
-                className="w-8 h-8 rounded-lg bg-white/5 text-slate-300 hover:bg-rose-500/20 hover:text-rose-400 flex items-center justify-center transition"
+                className="w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-750 hover:bg-rose-50 hover:text-rose-600 flex items-center justify-center transition cursor-pointer font-bold"
                 title="স্টপ অডিওবুক"
               >
                 ■
@@ -311,20 +307,20 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
         {/* Right Side: Night mode toggle & Scale (Zoom) controls */}
         <div className="flex items-center gap-3">
           {/* Zoom controls */}
-          <div className="flex items-center gap-1.5 bg-white/5 border border-white/5 p-1 rounded-xl">
+          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 p-1 rounded-xl">
             <button
               onClick={() => setScale(prev => Math.max(0.8, prev - 0.1))}
-              className="w-7 h-7 bg-white/5 hover:bg-white/10 text-slate-200 text-xs font-black rounded-lg transition"
+              className="w-7 h-7 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-black rounded-lg transition shadow-sm cursor-pointer"
               title="জুম আউট"
             >
               －
             </button>
-            <span className="text-[10px] font-mono text-slate-400 px-1 font-bold">
+            <span className="text-[10px] font-mono text-slate-600 px-1 font-bold">
               {Math.round(scale * 100)}%
             </span>
             <button
               onClick={() => setScale(prev => Math.min(1.4, prev + 0.1))}
-              className="w-7 h-7 bg-white/5 hover:bg-white/10 text-slate-200 text-xs font-black rounded-lg transition"
+              className="w-7 h-7 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-black rounded-lg transition shadow-sm cursor-pointer"
               title="জুম ইন"
             >
               ＋
@@ -334,10 +330,10 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
           {/* Night Mode Switcher */}
           <button
             onClick={() => setIsNightMode(!isNightMode)}
-            className={`w-9 h-9 rounded-xl flex items-center justify-center transition border ${
+            className={`w-9 h-9 rounded-xl flex items-center justify-center transition border cursor-pointer ${
               isNightMode
-                ? 'bg-purple-500/10 border-purple-500 text-purple-400 shadow-md'
-                : 'bg-white/5 border-white/5 text-slate-400 hover:text-slate-200 hover:bg-white/10'
+                ? 'bg-amber-50 border-amber-500 text-amber-600 shadow-sm'
+                : 'bg-slate-50 border-slate-200 text-slate-650 hover:text-slate-800 hover:bg-slate-100'
             }`}
             title="নাইট মোড সুইচ"
           >
@@ -351,7 +347,7 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
       <div 
         ref={containerRef} 
         onScroll={handleScroll}
-        className="w-full h-[80vh] overflow-y-auto bg-dark-900/40 border border-white/5 rounded-3xl p-4 md:p-8 flex flex-col items-center gap-8 scroll-smooth relative"
+        className="w-full h-[80vh] overflow-y-auto bg-slate-100 border border-slate-200 rounded-3xl p-4 md:p-8 flex flex-col items-center gap-8 scroll-smooth relative shadow-inner shadow-slate-200/50"
       >
         {renderedPages.map((pageNum) => (
           <PDFPage 
@@ -364,43 +360,43 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
           />
         ))}
 
-        {/* Scribd-style Frosted Paywall Overlay immediately below the 4th preview page */}
+        {/* Scribd-style paywall overlay */}
         {!isPurchased && (
-          <div className="w-full max-w-[800px] rounded-2xl border border-white/5 overflow-hidden relative min-h-[480px] bg-dark-950/30 flex flex-col items-center justify-center p-6 md:p-12 text-center backdrop-blur-xl">
+          <div className="w-full max-w-[800px] rounded-2xl border border-slate-200 overflow-hidden relative min-h-[480px] bg-white/70 flex flex-col items-center justify-center p-6 md:p-12 text-center backdrop-blur-xl shadow-lg shadow-slate-100">
             
             {/* Blurry document visual simulation sheet in background */}
-            <div className="absolute inset-0 bg-gradient-to-b from-dark-900/60 to-dark-950/90 pointer-events-none z-0" />
-            <div className="absolute top-10 left-[50%] -translate-x-[50%] w-[90%] h-[350px] bg-white opacity-[0.02] blur-[4px] rounded border border-white/10 flex flex-col gap-4 p-8 z-0">
-              <div className="h-6 bg-white/20 w-3/4 rounded" />
-              <div className="h-4 bg-white/10 w-full rounded" />
-              <div className="h-4 bg-white/10 w-full rounded" />
-              <div className="h-4 bg-white/10 w-5/6 rounded" />
-              <div className="h-4 bg-white/10 w-2/3 rounded" />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-50/60 to-slate-100/90 pointer-events-none z-0" />
+            <div className="absolute top-10 left-[50%] -translate-x-[50%] w-[90%] h-[350px] bg-slate-900 opacity-[0.03] blur-[4px] rounded border border-slate-200/30 flex flex-col gap-4 p-8 z-0">
+              <div className="h-6 bg-slate-900/20 w-3/4 rounded" />
+              <div className="h-4 bg-slate-900/10 w-full rounded" />
+              <div className="h-4 bg-slate-900/10 w-full rounded" />
+              <div className="h-4 bg-slate-900/10 w-5/6 rounded" />
+              <div className="h-4 bg-slate-900/10 w-2/3 rounded" />
             </div>
 
             {/* Paywall content card overlay */}
-            <div className="relative z-10 w-full max-w-lg glass-panel p-6 md:p-8 rounded-3xl border border-white/10 shadow-2xl flex flex-col gap-6">
+            <div className="relative z-10 w-full max-w-lg bg-white border border-slate-200 shadow-2xl p-6 md:p-8 rounded-3xl flex flex-col gap-6">
               
               <div className="flex flex-col gap-1">
-                <span className="text-xs font-black text-primary-400 uppercase tracking-widest">রিডার পে-ওয়াল লক</span>
-                <h3 className="text-xl md:text-2xl font-black text-slate-100 font-serif">বাকি অংশ পড়তে বইটি আনলক করুন</h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <span className="text-xs font-black text-amber-655 uppercase tracking-widest text-amber-600">রিডার পে-ওয়াল লক</span>
+                <h3 className="text-xl md:text-2xl font-black text-slate-800 font-serif">বাকি অংশ পড়তে বইটি আনলক করুন</h3>
+                <p className="text-xs text-slate-500 mt-1 font-sans">
                   বিকাশ বা নগদে সরাসরি সেন্ড মানি করুন। পেমেন্ট পাওয়ার কয়েক সেকেন্ডের মধ্যে পুরো বইটি আনলক হয়ে যাবে।
                 </p>
               </div>
 
               {submitSuccess ? (
-                <div className="flex flex-col items-center justify-center text-center py-4 gap-3 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-4">
-                  <div className="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center animate-bounce">
+                <div className="flex flex-col items-center justify-center text-center py-4 gap-3 bg-emerald-50 border border-emerald-200 rounded-2xl p-4">
+                  <div className="w-10 h-10 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-600 flex items-center justify-center animate-bounce">
                     ✓
                   </div>
-                  <h4 className="text-sm font-bold text-slate-200">TxID সফলভাবে রেজিস্টার্ড হয়েছে!</h4>
-                  <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
-                    Your transaction code <strong className="text-primary-400 font-mono select-all">{txId}</strong> is under verification. Refresh library dashboard check.
+                  <h4 className="text-sm font-bold text-slate-800">TxID সফলভাবে রেজিস্টার্ড হয়েছে!</h4>
+                  <p className="text-[11px] text-slate-600 leading-relaxed font-sans">
+                    আপনার ট্রানজেকশন কোড <strong className="text-amber-600 font-mono select-all font-bold">{txId}</strong> যাচাই করা হচ্ছে। অনুগ্রহ করে লাইব্রেরি ড্যাশবোর্ড রিফ্রেশ করুন।
                   </p>
                   <button 
                     onClick={() => window.location.reload()}
-                    className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition duration-200 mt-2"
+                    className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition duration-200 mt-2 shadow-sm cursor-pointer"
                   >
                     রিফ্রেশ করুন (Refresh Viewer)
                   </button>
@@ -408,11 +404,11 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
               ) : (
                 <div className="flex flex-col gap-5 text-left">
                   
-                  <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-300 leading-relaxed flex items-start gap-2.5">
-                    <span className="text-base">⚠️</span>
-                    <div>
-                      <strong className="font-extrabold block text-amber-200 mb-0.5">গুরুত্বপূর্ণ পেমেন্ট সতর্কবার্তা:</strong>
-                      আপনাকে অবশ্যই বিকাশ বা নগদের <strong className="text-slate-100 underline decoration-amber-400 underline-offset-2">"Send Money (টাকা পাঠান)"</strong> অপশনটি ব্যবহার করতে হবে। রিচার্জ, ক্যাশ-ইন বা মার্চেন্ট পেমেন্ট গেটওয়েতে প্রসেসড হবে না।
+                  <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-[11px] text-amber-800 leading-relaxed flex items-start gap-2.5 shadow-sm">
+                    <span className="text-base select-none">⚠️</span>
+                    <div className="font-sans">
+                      <strong className="font-extrabold block text-amber-700 mb-0.5">গুরুত্বপূর্ণ পেমেন্ট সতর্কবার্তা:</strong>
+                      আপনাকে অবশ্যই বিকাশ বা নগদের <strong className="text-slate-900 underline decoration-amber-500 underline-offset-2 font-bold">"Send Money (টাকা পাঠান)"</strong> অপশনটি ব্যবহার করতে হবে। রিচার্জ, ক্যাশ-ইন বা মার্চেন্ট পেমেন্ট প্রসেসড হবে না।
                     </div>
                   </div>
 
@@ -421,10 +417,10 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
                     <button
                       type="button"
                       onClick={() => setPaymentGateway('bkash')}
-                      className={`flex items-center justify-center gap-1.5 py-2.5 rounded-xl border text-xs font-black transition duration-200 ${
+                      className={`flex items-center justify-center gap-1.5 py-2.5 rounded-xl border text-xs font-black transition duration-200 cursor-pointer ${
                         paymentGateway === 'bkash'
-                          ? 'bg-pink-500/10 border-pink-500 text-pink-400'
-                          : 'border-white/5 bg-white/5 text-slate-400 hover:bg-white/10'
+                          ? 'bg-pink-50 border-pink-500 text-pink-600 shadow-sm font-bold'
+                          : 'border-slate-200 bg-slate-50 text-slate-550 hover:bg-slate-100 font-semibold'
                       }`}
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-pink-500" />
@@ -433,10 +429,10 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
                     <button
                       type="button"
                       onClick={() => setPaymentGateway('nagad')}
-                      className={`flex items-center justify-center gap-1.5 py-2.5 rounded-xl border text-xs font-black transition duration-200 ${
+                      className={`flex items-center justify-center gap-1.5 py-2.5 rounded-xl border text-xs font-black transition duration-200 cursor-pointer ${
                         paymentGateway === 'nagad'
-                          ? 'bg-orange-500/10 border-orange-500 text-orange-400'
-                          : 'border-white/5 bg-white/5 text-slate-400 hover:bg-white/10'
+                          ? 'bg-orange-50 border-orange-500 text-orange-600 shadow-sm font-bold'
+                          : 'border-slate-200 bg-slate-50 text-slate-550 hover:bg-slate-100 font-semibold'
                       }`}
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
@@ -445,15 +441,15 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
                   </div>
 
                   {/* Payment numbers guidelines */}
-                  <div className="bg-dark-950/40 border border-white/5 p-3.5 rounded-2xl text-[11px] text-slate-400 flex flex-col gap-1.5 leading-relaxed font-sans bg-dark-950/20">
-                    <div className="font-extrabold text-slate-300 border-b border-white/5 pb-1 flex justify-between">
+                  <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl text-[11px] text-slate-600 flex flex-col gap-1.5 leading-relaxed font-sans shadow-inner shadow-slate-100">
+                    <div className="font-extrabold text-slate-700 border-b border-slate-200 pb-1 flex justify-between">
                       <span>সেন্ড মানি গাইড (Send Money)</span>
-                      <span className="text-primary-400 font-bold">৳ ২৫০</span>
+                      <span className="text-amber-600 font-bold">৳ {bookPrice}</span>
                     </div>
-                    <p>১. ওয়ালেট অ্যাপ থেকে <strong className="text-slate-200">Send Money</strong> অপশনটি বেছে নিন।</p>
+                    <p>১. ওয়ালেট অ্যাপ থেকে <strong className="text-slate-800 font-bold">Send Money</strong> অপশনটি বেছে নিন।</p>
                     <p>
-                      ২. পেমেন্ট করুন এই নম্বরে: <strong className="text-primary-300 select-all font-mono">
-                        {paymentGateway === 'bkash' ? '01712-XXXXXX' : '01912-XXXXXX'}
+                      ২. পেমেন্ট করুন এই নম্বরে: <strong className="text-amber-600 select-all font-mono font-bold text-xs">
+                        01832984186
                       </strong>
                     </p>
                     <p>৩. সফল পেমেন্ট শেষে প্রাপ্ত TxID কোড নিচে সাবমিট করুন।</p>
@@ -471,7 +467,7 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
                           placeholder="উদা. ০১৭XXXXXXXX"
                           value={phoneNumber}
                           onChange={(e) => setPhoneNumber(e.target.value)}
-                          className="w-full glass-input px-3.5 py-2.5 rounded-xl text-xs font-mono font-medium focus:border-cyan-500"
+                          className="w-full border border-slate-200 bg-slate-50 px-3.5 py-2.5 rounded-xl text-xs font-mono font-medium focus:border-amber-500 focus:outline-none text-slate-800 placeholder-slate-450"
                         />
                       </div>
 
@@ -483,14 +479,14 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
                           placeholder="উদা. 8A4B6C8D9E"
                           value={txId}
                           onChange={(e) => setTxId(e.target.value)}
-                          className="w-full glass-input px-3.5 py-2.5 rounded-xl text-xs font-mono uppercase font-black tracking-wider focus:border-cyan-500"
+                          className="w-full border border-slate-200 bg-slate-50 px-3.5 py-2.5 rounded-xl text-xs font-mono uppercase font-black tracking-wider focus:border-amber-500 focus:outline-none text-slate-800 placeholder-slate-450"
                         />
                       </div>
 
                     </div>
 
                     {submitError && (
-                      <div className="text-[11px] text-rose-400 font-bold bg-rose-500/10 border border-rose-500/20 px-3 py-1.5 rounded-xl">
+                      <div className="text-[11px] text-rose-650 font-bold bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-xl">
                         {submitError}
                       </div>
                     )}
@@ -498,10 +494,10 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className={`w-full py-3 bg-gradient-to-r text-white font-black text-xs rounded-xl transition duration-200 shadow flex items-center justify-center gap-1.5 ${
+                      className={`w-full py-3 text-white font-black text-xs rounded-xl transition duration-200 shadow-md flex items-center justify-center gap-1.5 cursor-pointer ${
                         paymentGateway === 'bkash'
-                          ? 'from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700'
-                          : 'from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700'
+                          ? 'bg-pink-500 hover:bg-pink-600 shadow-pink-500/10'
+                          : 'bg-orange-500 hover:bg-orange-600 shadow-orange-500/10'
                       }`}
                     >
                       {isSubmitting ? (
@@ -538,20 +534,20 @@ export default function PDFViewer({ bookId, totalPageCount, previewLimit, isPurc
             top: `${dictionaryPosition.y}px`,
             transform: 'translateX(-50%)',
           }}
-          className="bg-dark-900/95 border border-lavender/35 p-4.5 rounded-2xl shadow-2xl z-[1000] w-64 text-left leading-relaxed text-xs text-slate-200 backdrop-blur-2xl animate-fade-in pointer-events-auto"
+          className="bg-white border border-slate-200 p-4.5 rounded-2xl shadow-2xl z-[1000] w-64 text-left leading-relaxed text-xs text-slate-700 animate-fade-in pointer-events-auto shadow-slate-300/40"
         >
           <div className="flex flex-col gap-1.5 font-sans">
-            <div className="flex justify-between items-center border-b border-white/5 pb-1">
-              <span className="text-[10px] font-black text-cyan-400 uppercase tracking-wider">গ্রন্থী শব্দার্থ অভিধান</span>
+            <div className="flex justify-between items-center border-b border-slate-100 pb-1">
+              <span className="text-[10px] font-black text-amber-600 uppercase tracking-wider">বিহান শব্দার্থ অভিধান</span>
               <button 
                 onClick={() => setSelectedWord('')}
-                className="text-slate-400 hover:text-white text-[10px]"
+                className="text-slate-400 hover:text-slate-600 text-[10px] cursor-pointer"
               >
                 ✕
               </button>
             </div>
-            <strong className="text-white text-sm font-serif select-none">"{selectedWord}"</strong>
-            <p className="text-slate-300 text-[11px] leading-relaxed select-all">
+            <strong className="text-slate-900 text-sm font-serif select-none">"{selectedWord}"</strong>
+            <p className="text-slate-650 text-[11px] leading-relaxed select-all">
               {getBengaliDefinition(selectedWord)}
             </p>
           </div>
@@ -640,24 +636,24 @@ function PDFPage({ bookId, pageNum, userEmail, isNightMode, scaleMultiplier }: P
   return (
     <div 
       data-page={pageNum} 
-      className="pdf-page-wrapper w-full max-w-[800px] flex flex-col items-center bg-dark-900 border border-white/5 shadow-2xl rounded-xl overflow-hidden relative min-h-[500px]"
+      className="pdf-page-wrapper w-full max-w-[800px] flex flex-col items-center bg-white border border-slate-200 shadow-md rounded-xl overflow-hidden relative min-h-[500px]"
       style={{ maxWidth: `${800 * scaleMultiplier}px` }}
     >
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-dark-900/80 backdrop-blur-sm z-10">
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-50/70 backdrop-blur-sm z-10">
           <div className="flex flex-col items-center gap-3">
-            <div className="w-10 h-10 border-4 border-primary-500/20 border-t-primary-500 rounded-full animate-spin"></div>
-            <p className="text-xs text-slate-400">পৃষ্ঠা {pageNum} তৈরি হচ্ছে...</p>
+            <div className="w-10 h-10 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin"></div>
+            <p className="text-xs text-slate-650">পৃষ্ঠা {pageNum} তৈরি হচ্ছে...</p>
           </div>
         </div>
       )}
 
       {error && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-dark-900 text-slate-400 p-6 text-center">
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50 text-slate-500 p-6 text-center">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-rose-500 mb-2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
           </svg>
-          <p className="text-sm font-semibold text-slate-300">পৃষ্ঠা রেন্ডার করা যায়নি</p>
+          <p className="text-sm font-semibold text-slate-700">পৃষ্ঠা রেন্ডার করা যায়নি</p>
           <p className="text-xs text-slate-500 mt-1">অনুগ্রহ করে ইন্টারনেট সংযোগ পরীক্ষা করে পেজ রিফ্রেশ করুন।</p>
         </div>
       )}
@@ -669,12 +665,12 @@ function PDFPage({ bookId, pageNum, userEmail, isNightMode, scaleMultiplier }: P
         }`} 
       />
       
-      {/* 🌊 Copyright Copyright-Protection Layer: Dynamic Diagonal Licensed Watermarking */}
-      <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden select-none z-10 opacity-[0.06] rotate-[-30deg] text-slate-400 font-mono text-[9px] md:text-xs tracking-[0.25em] uppercase whitespace-nowrap">
-        Licensed to: {userEmail || 'Gronthi Reader'} - {new Date().toLocaleDateString()}
+      {/* 🌊 Copyright-Protection Layer: Dynamic Licensed Watermarking */}
+      <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden select-none z-10 opacity-[0.03] rotate-[-30deg] text-slate-800 font-mono text-[9px] md:text-xs tracking-[0.25em] uppercase whitespace-nowrap">
+        Licensed to: {userEmail || 'Bihan Reader'} - {new Date().toLocaleDateString()}
       </div>
 
-      <div className="w-full bg-dark-950/60 py-2 border-t border-white/5 flex items-center justify-between px-6 text-xs text-slate-500">
+      <div className="w-full bg-slate-50 py-2.5 border-t border-slate-100 flex items-center justify-between px-6 text-xs text-slate-500">
         <span>পৃষ্ঠা {pageNum}</span>
         <span className="font-semibold select-none">সুরক্ষিত প্রিভিউ রিডার</span>
       </div>
