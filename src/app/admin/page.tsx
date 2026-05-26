@@ -619,7 +619,7 @@ export default function AdminDashboard() {
                   </div>
 
                   {/* SVG circular performance target indicator */}
-                  <div className="flex flex-col items-center gap-1.5 flex-shrink-0 select-none bg-dark-950/40 p-3.5 rounded-2xl border border-white/5">
+                  <div className="flex flex-col items-center gap-1.5 flex-shrink-0 select-none bg-slate-100/70 p-3.5 rounded-2xl border border-slate-200/40">
                     <div className="relative w-16 h-16 flex items-center justify-center">
                       <svg className="w-full h-full transform -rotate-90">
                         <circle cx="32" cy="32" r="26" stroke="rgba(15,23,42,0.03)" strokeWidth="4" fill="transparent" />
@@ -705,16 +705,16 @@ export default function AdminDashboard() {
                 <div className="flex flex-col gap-2 border-t border-white/5 pt-2 select-none">
                   <div className="flex items-center justify-between text-[9px] text-slate-500 font-bold">
                     <span>চাইম টোন টগল</span>
-                    <div className="flex gap-1.5 bg-dark-950/50 p-0.5 rounded border border-white/5">
+                    <div className="flex gap-1.5 bg-slate-100 p-0.5 rounded border border-slate-200">
                       <button 
                         onClick={() => { setChimeTone('royal'); playAudioChime('royal'); }}
-                        className={`px-1.5 py-0.5 rounded text-[8px] font-black transition cursor-pointer ${chimeTone === 'royal' ? 'bg-lavender text-velvet' : 'text-slate-500 hover:text-slate-300'}`}
+                        className={`px-1.5 py-0.5 rounded text-[8px] font-black transition cursor-pointer ${chimeTone === 'royal' ? 'bg-amber-500 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
                       >
                         Royal
                       </button>
                       <button 
                         onClick={() => { setChimeTone('neon'); playAudioChime('neon'); }}
-                        className={`px-1.5 py-0.5 rounded text-[8px] font-black transition cursor-pointer ${chimeTone === 'neon' ? 'bg-primary-500 text-slate-900' : 'text-slate-500 hover:text-slate-300'}`}
+                        className={`px-1.5 py-0.5 rounded text-[8px] font-black transition cursor-pointer ${chimeTone === 'neon' ? 'bg-amber-500 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
                       >
                         Neon
                       </button>
@@ -850,7 +850,7 @@ export default function AdminDashboard() {
                                 setSelectedUser(u);
                                 setIsDrawerOpen(true);
                               }}
-                              className="px-4 py-2 bg-[#3b2a60]/50 hover:bg-lavender hover:text-velvet text-lavender rounded-xl text-[10px] font-black tracking-wide border border-lavender/25 transition duration-200 cursor-pointer shadow-sm select-none"
+                              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 hover:text-slate-900 text-slate-700 rounded-xl text-[10px] font-black tracking-wide border border-slate-200/80 transition duration-200 cursor-pointer shadow-sm select-none"
                             >
                               অ্যাক্সেস নিয়ন্ত্রণ
                             </button>
@@ -884,7 +884,7 @@ export default function AdminDashboard() {
                       <tbody className="divide-y divide-white/5">
                         {data.logs.map((log: any) => (
                           <tr key={log._id} className={`hover:bg-white/5 transition ${
-                            log.isMatched ? 'text-slate-300' : 'bg-orange-500/5 text-orange-200'
+                            log.isMatched ? 'text-slate-300' : 'bg-orange-500/5 text-orange-700 font-bold'
                           }`}>
                             <td className="p-4 text-[10px] text-slate-500">
                               {new Date(log.createdAt).toLocaleString()}
@@ -1153,7 +1153,7 @@ export default function AdminDashboard() {
                     
                     <div className="flex flex-col gap-3 max-h-[360px] overflow-y-auto pr-1">
                       {data.catalog.map((book: any) => (
-                        <div key={book._id} className="p-4 rounded-2xl bg-dark-950/40 border border-white/5 flex items-center justify-between gap-4 font-sans text-xs">
+                        <div key={book._id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between gap-4 font-sans text-xs">
                           <div className="flex gap-4 items-center min-w-0">
                             <div className="w-8 h-11 bg-white/5 rounded border border-white/10 flex-shrink-0 flex items-center justify-center font-serif text-[6px] text-white/50">{book.title}</div>
                             <div className="flex flex-col min-w-0 text-left">
@@ -1282,15 +1282,15 @@ export default function AdminDashboard() {
           />
 
           {/* Drawer Body Panel */}
-          <div className="relative w-full max-w-md h-full bg-[#160e29]/95 border-l border-white/10 shadow-2xl p-6 flex flex-col gap-6 backdrop-blur-2xl z-10 transition-transform duration-300 transform translate-x-0 overflow-y-auto">
+          <div className="relative w-full max-w-md h-full bg-white border-l border-gray-200 shadow-2xl p-6 flex flex-col gap-6 z-10 transition-transform duration-300 transform translate-x-0 overflow-y-auto">
             {/* Top accent glow line */}
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-lavender via-cyan-400 to-indigo-500 shadow-[0_0_15px_rgba(192,132,252,0.4)]" />
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-indigo-600" />
 
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-white/5 pb-4">
+            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
               <div className="text-left">
-                <span className="text-[9px] font-black text-lavender/80 uppercase tracking-[0.2em] font-mono">◈ কাস্টমার লাইব্রেরি অ্যাক্সেস</span>
-                <h3 className="text-sm font-black text-slate-100 font-serif mt-1 truncate max-w-[280px]">
+                <span className="text-[9px] font-black text-indigo-600 uppercase tracking-[0.2em] font-mono">◈ কাস্টমার লাইব্রেরি অ্যাক্সেস</span>
+                <h3 className="text-sm font-black text-slate-900 font-serif mt-1 truncate max-w-[280px]">
                   {selectedUser.email}
                 </h3>
               </div>
@@ -1299,7 +1299,7 @@ export default function AdminDashboard() {
                   setIsDrawerOpen(false);
                   setSelectedUser(null);
                 }}
-                className="w-7 h-7 rounded-full bg-white/5 hover:bg-rose-500/10 hover:text-rose-400 text-slate-400 flex items-center justify-center transition border border-white/10 cursor-pointer text-xs"
+                className="w-7 h-7 rounded-full bg-gray-100 hover:bg-rose-50 hover:text-rose-600 text-slate-500 flex items-center justify-center transition border border-gray-200 cursor-pointer text-xs"
               >
                 ✕
               </button>
@@ -1369,11 +1369,11 @@ export default function AdminDashboard() {
                     <select
                       value={selectedBookToGrant}
                       onChange={(e) => setSelectedBookToGrant(e.target.value)}
-                      className="w-full appearance-none px-4 py-3 bg-[#1e1436] border border-lavender/25 rounded-2xl text-xs font-black text-slate-200 outline-none focus:border-lavender cursor-pointer shadow-lg shadow-lavender/5"
+                      className="w-full appearance-none px-4 py-3 bg-white border border-gray-200 rounded-2xl text-xs font-black text-slate-800 outline-none focus:border-indigo-600 cursor-pointer shadow-lg shadow-slate-100"
                     >
-                      <option value="">-- বই সিলেক্ট করুন --</option>
+                      <option value="" className="bg-white text-slate-800">-- বই সিলেক্ট করুন --</option>
                       {unownedBooks.map((cb: any) => (
-                        <option key={cb._id} value={cb._id} className="bg-[#160e29] text-slate-200">
+                        <option key={cb._id} value={cb._id} className="bg-white text-slate-800">
                           {cb.title} (৳ {cb.price || 0})
                         </option>
                       ))}

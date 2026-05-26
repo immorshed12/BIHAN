@@ -7,7 +7,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-dark-900/80 border-t border-white/5 backdrop-blur-sm mt-16">
+    <footer className="w-full bg-slate-50 border-t border-slate-200/80 mt-16 font-sans">
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-12">
         
         {/* Top section: Brand + Nav columns */}
@@ -22,7 +22,7 @@ export default function Footer() {
                 className="h-16 w-auto object-contain filter drop-shadow-[0_0_20px_rgba(15,23,42,0.03)]"
               />
             </Link>
-            <p className="text-xs text-slate-400 leading-relaxed max-w-sm font-sans">
+            <p className="text-xs text-slate-500 leading-relaxed max-w-sm font-sans">
               বিহান হলো বাংলাদেশের প্রথম প্রিমিয়াম ডিজিটাল পাঠশালা। বিকাশ ও নগদে সহজ পেমেন্টে প্রিমিয়াম পিডিএফ গাইড, ই-বুক এবং শিক্ষামূলক রিসোর্স সংগ্রহ করুন।
             </p>
             <div className="flex items-center gap-3 mt-2">
@@ -31,7 +31,7 @@ export default function Footer() {
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 bg-white/5 hover:bg-[#1877F2]/20 border border-white/5 hover:border-[#1877F2]/40 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#1877F2] transition duration-300"
+                className="w-9 h-9 bg-slate-100 hover:bg-[#1877F2]/20 border border-slate-200/60 hover:border-[#1877F2]/40 rounded-xl flex items-center justify-center text-slate-500 hover:text-[#1877F2] transition duration-300"
                 aria-label="Facebook"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -43,7 +43,7 @@ export default function Footer() {
                 href="https://wa.me/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 bg-white/5 hover:bg-[#25D366]/20 border border-white/5 hover:border-[#25D366]/40 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#25D366] transition duration-300"
+                className="w-9 h-9 bg-slate-100 hover:bg-[#25D366]/20 border border-slate-200/60 hover:border-[#25D366]/40 rounded-xl flex items-center justify-center text-slate-500 hover:text-[#25D366] transition duration-300"
                 aria-label="WhatsApp"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -53,7 +53,7 @@ export default function Footer() {
               {/* Email */}
               <a
                 href="mailto:immorshed068@gmail.com"
-                className="w-9 h-9 bg-white/5 hover:bg-primary-500/20 border border-white/5 hover:border-primary-500/40 rounded-xl flex items-center justify-center text-slate-400 hover:text-primary-400 transition duration-300"
+                className="w-9 h-9 bg-slate-100 hover:bg-amber-500/20 border border-slate-200/60 hover:border-amber-500/40 rounded-xl flex items-center justify-center text-slate-500 hover:text-amber-600 transition duration-300"
                 aria-label="ইমেইল করুন"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.75} stroke="currentColor">
@@ -65,22 +65,22 @@ export default function Footer() {
 
           {/* Nav column: লাইব্রেরি */}
           <div className="flex flex-col gap-4">
-            <h4 className="text-[10px] uppercase font-black tracking-widest text-slate-400">লাইব্রেরি</h4>
+            <h4 className="text-[10px] uppercase font-black tracking-widest text-slate-500">লাইব্রেরি</h4>
             <nav className="flex flex-col gap-2.5">
-              <Link href="/#premium-catalog" className="text-xs text-slate-300 hover:text-lavender transition font-medium">প্রিমিয়াম গাইড</Link>
-              <Link href="/#free-catalog" className="text-xs text-slate-300 hover:text-lavender transition font-medium">ফ্রি বই</Link>
-              <Link href="/" className="text-xs text-slate-300 hover:text-lavender transition font-medium">সকল ক্যাটাগরি</Link>
-              <Link href="/library" className="text-xs text-slate-300 hover:text-lavender transition font-medium">আমার শেলফ</Link>
+              <Link href="/#premium-catalog" className="text-xs text-slate-600 hover:text-amber-600 transition font-medium">প্রিমিয়াম গাইড</Link>
+              <Link href="/#free-catalog" className="text-xs text-slate-600 hover:text-amber-600 transition font-medium">ফ্রি বই</Link>
+              <Link href="/" className="text-xs text-slate-600 hover:text-amber-600 transition font-medium">সকল ক্যাটাগরি</Link>
+              <Link href="/library" className="text-xs text-slate-600 hover:text-amber-600 transition font-medium">আমার শেলফ</Link>
             </nav>
           </div>
 
           {/* Nav column: সহায়তা */}
           <div className="flex flex-col gap-4">
-            <h4 className="text-[10px] uppercase font-black tracking-widest text-slate-400">সহায়তা ও যোগাযোগ</h4>
+            <h4 className="text-[10px] uppercase font-black tracking-widest text-slate-500">সহায়তা ও যোগাযোগ</h4>
             <nav className="flex flex-col gap-2.5">
-              <a href="mailto:immorshed068@gmail.com" className="text-xs text-slate-300 hover:text-lavender transition font-medium">সাপোর্ট ইমেইল</a>
-              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" className="text-xs text-slate-300 hover:text-lavender transition font-medium">হোয়াটসঅ্যাপ সাপোর্ট</a>
-              <span className="text-xs text-slate-300 font-medium">পেমেন্ট: বিকাশ / নগদ</span>
+              <a href="mailto:immorshed068@gmail.com" className="text-xs text-slate-600 hover:text-amber-600 transition font-medium">সাপোর্ট ইমেইল</a>
+              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" className="text-xs text-slate-600 hover:text-amber-600 transition font-medium">হোয়াটসঅ্যাপ সাপোর্ট</a>
+              <span className="text-xs text-slate-600 font-medium">পেমেন্ট: বিকাশ / নগদ</span>
               <span className="text-xs text-slate-500 font-medium">সার্ভিস: ২৪ ঘণ্টা, ৭ দিন</span>
             </nav>
           </div>
@@ -88,7 +88,7 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-white/5 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
+        <div className="border-t border-slate-200/80 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="text-[11px] text-slate-500 font-sans text-center md:text-left">
             © {currentYear} বিহান (BIHAN). সর্বস্বত্ব সংরক্ষিত।
           </p>
