@@ -109,7 +109,7 @@ export default function LibraryShelfPage() {
             📚
           </div>
           <div className="flex flex-col gap-2">
-            <h1 className="text-2xl font-black text-slate-100 font-serif">আমার গ্রন্থী তাক</h1>
+            <h1 className="text-2xl font-black text-slate-100 font-serif">আমার বিহান তাক</h1>
             <p className="text-sm text-slate-400">আপনার প্রোফাইল ও লাইব্রেরি দেখতে প্রথমে লগইন করুন।</p>
           </div>
           <Link
@@ -185,7 +185,7 @@ export default function LibraryShelfPage() {
               {/* Section Label */}
               <div className="flex items-center justify-between">
                 <span className="text-[9px] font-black text-lavender/80 uppercase tracking-[0.25em] font-mono">
-                  ◈ গ্রন্থী — সদস্য প্রোফাইল
+                  ◈ বিহান — সদস্য প্রোফাইল
                 </span>
                 <span className="text-[9px] font-black text-cyan-400/70 uppercase tracking-widest font-mono animate-pulse">
                   ● LIVE

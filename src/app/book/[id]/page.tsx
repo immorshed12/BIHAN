@@ -183,7 +183,7 @@ export default function BookDetailsPage({ params }: { params: { id: string } }) 
 
   const handleShareClick = (platform: 'fb' | 'wa') => {
     const shareUrl = encodeURIComponent(window.location.href);
-    const shareText = encodeURIComponent(`গ্রন্থী (Gronthi) থেকে "${book?.title}" বইটি সম্পূর্ণ ফ্রিতে ডাউনলোড করুন!`);
+    const shareText = encodeURIComponent(`বিহান (BIHAN) থেকে "${book?.title}" বইটি সম্পূর্ণ ফ্রিতে ডাউনলোড করুন!`);
     let url = '';
     if (platform === 'fb') {
       url = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
@@ -396,7 +396,7 @@ export default function BookDetailsPage({ params }: { params: { id: string } }) 
           <Link href="/" className="flex items-center select-none cursor-pointer -my-4">
             <img
               src="/logo.png"
-              alt="গ্রন্থী (Gronthi)"
+              alt="বিহান (BIHAN)"
               className="h-24 md:h-32 w-auto object-contain filter drop-shadow-[0_0_20px_rgba(255,255,255,0.07)]"
             />
           </Link>
@@ -450,7 +450,7 @@ export default function BookDetailsPage({ params }: { params: { id: string } }) 
 
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-xs text-slate-400 text-left -mt-2">
-          <Link href="/" className="hover:text-primary-400 transition font-extrabold select-none">গ্রন্থী লাইব্রেরি</Link>
+          <Link href="/" className="hover:text-primary-400 transition font-extrabold select-none">বিহান লাইব্রেরি</Link>
           <span>/</span>
           <span className="text-slate-200 truncate max-w-[200px] font-medium">{book.title}</span>
         </nav>
@@ -559,7 +559,7 @@ export default function BookDetailsPage({ params }: { params: { id: string } }) 
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-black tracking-tight font-serif flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-cyan-400" />
-              গ্রন্থী ইন্টারেক্টিভ ই-রিডার
+              বিহান ইন্টারেক্টিভ ই-রিডার
             </h3>
             <span className="text-xs text-slate-500">
               {isPurchased || book.isFree ? 'সম্পূর্ণ বই আনলকড' : `ফ্রি প্রিভিউ (১ থেকে ${book.previewLimit} পৃষ্ঠা)`}
@@ -749,7 +749,7 @@ export default function BookDetailsPage({ params }: { params: { id: string } }) 
               {/* Drawer Header */}
               <div className="flex justify-between items-center border-b border-white/5 pb-4">
                 <div className="flex flex-col gap-0.5 text-left">
-                  <span className="text-[9px] font-black text-rose-400 uppercase tracking-widest">গ্রন্থী সিকিউর পেমেন্ট</span>
+                  <span className="text-[9px] font-black text-rose-400 uppercase tracking-widest">বিহান সিকিউর পেমেন্ট</span>
                   <h3 className="text-lg font-black text-slate-200 font-serif">বিকাশ / নগদ দিয়ে পেমেন্ট করুন</h3>
                 </div>
                 <button

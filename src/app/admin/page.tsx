@@ -536,8 +536,8 @@ export default function AdminDashboard() {
         {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between border-b border-white/5 pb-6">
           <div>
-            <h1 className="text-3xl font-black bg-gradient-to-r from-slate-100 to-lavender bg-clip-text text-transparent tracking-tight font-serif">
-              গ্রন্থী কন্ট্রোল রুম (Control Room)
+            <h1 className="text-3xl font-black bg-gradient-to-r from-slate-900 via-slate-800 to-amber-600 bg-clip-text text-transparent tracking-tight font-serif">
+              বিহান কন্ট্রোল রুম (Control Room)
             </h1>
             <p className="text-xs text-slate-500 mt-1">
               স্বয়ংক্রিয় অর্ডার ট্র্যাকিং, ই-বুক পাবলিশিং CRUD, এসএমএস গেটওয়ে ও কুপন জেনারেটর প্যানেল।
@@ -587,8 +587,8 @@ export default function AdminDashboard() {
                     <svg className="w-full h-full overflow-visible" viewBox="0 0 100 30" preserveAspectRatio="none">
                       <defs>
                         <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#d3c5f6" stopOpacity="0.45" />
-                          <stop offset="100%" stopColor="#3b2a60" stopOpacity="0.0" />
+                          <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.4" />
+                          <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.0" />
                         </linearGradient>
                       </defs>
                       {/* Area path */}
@@ -600,14 +600,14 @@ export default function AdminDashboard() {
                       <path 
                         d="M0 30 Q 15 15, 30 22 T 60 8 T 90 4" 
                         fill="none" 
-                        stroke="#d3c5f6" 
+                        stroke="#d97706" 
                         strokeWidth="1.2" 
                         strokeLinecap="round"
                       />
                       {/* Interaction points */}
-                      <circle cx="30" cy="22" r="1.2" fill="#d3c5f6" className="animate-ping" />
-                      <circle cx="60" cy="8" r="1.2" fill="#d3c5f6" />
-                      <circle cx="90" cy="4" r="1.2" fill="#d3c5f6" className="animate-pulse" />
+                      <circle cx="30" cy="22" r="1.2" fill="#d97706" className="animate-ping" />
+                      <circle cx="60" cy="8" r="1.2" fill="#d97706" />
+                      <circle cx="90" cy="4" r="1.2" fill="#d97706" className="animate-pulse" />
                     </svg>
                     {/* Axis values labels */}
                     <div className="absolute inset-x-0 bottom-0 flex justify-between text-[9px] text-slate-500 font-bold px-1 select-none">
@@ -622,11 +622,11 @@ export default function AdminDashboard() {
                   <div className="flex flex-col items-center gap-1.5 flex-shrink-0 select-none bg-dark-950/40 p-3.5 rounded-2xl border border-white/5">
                     <div className="relative w-16 h-16 flex items-center justify-center">
                       <svg className="w-full h-full transform -rotate-90">
-                        <circle cx="32" cy="32" r="26" stroke="rgba(255,255,255,0.03)" strokeWidth="4" fill="transparent" />
-                        <circle cx="32" cy="32" r="26" stroke="#c084fc" strokeWidth="4" fill="transparent" 
+                        <circle cx="32" cy="32" r="26" stroke="rgba(15,23,42,0.03)" strokeWidth="4" fill="transparent" />
+                        <circle cx="32" cy="32" r="26" stroke="#f59e0b" strokeWidth="4" fill="transparent" 
                           strokeDasharray={2 * Math.PI * 26} 
                           strokeDashoffset={2 * Math.PI * 26 * (1 - 0.82)} 
-                          className="transition-all duration-1000 ease-out drop-shadow-[0_0_8px_rgba(192,132,252,0.4)]"
+                          className="transition-all duration-1000 ease-out drop-shadow-[0_0_8px_rgba(245,158,11,0.45)]"
                         />
                       </svg>
                       <span className="absolute text-[10px] font-black text-slate-100 font-mono">82%</span>

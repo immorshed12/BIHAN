@@ -86,22 +86,22 @@ body {
    🛡️ BRAND REBRANDING HELPER OVERRIDES (AUTOMATED ADAPTABILITY)
    ======================================================= */
 
-/* Force warm off-white background everywhere bg-velvet / bg-dark-950 is used */
+/* Force warm off-white and slate backgrounds while supporting opacity modifiers */
 .bg-velvet {
-  background-color: #f8fafc !important;
+  background-color: rgba(248, 250, 252, var(--tw-bg-opacity, 1)) !important;
 }
 
 .bg-dark-950 {
-  background-color: #f1f5f9 !important; /* Soft Slate-100 */
+  background-color: rgba(241, 245, 249, var(--tw-bg-opacity, 1)) !important; /* Soft Slate-100 */
 }
 
 .bg-dark-900 {
-  background-color: #ffffff !important; /* Pure White */
+  background-color: rgba(255, 255, 255, var(--tw-bg-opacity, 1)) !important; /* Pure White Card */
 }
 
 /* Overrides for text contrast */
 .text-slate-100 {
-  color: #0f172a !important; /* Slate-900 */
+  color: #0f172a !important; /* Slate-900 Navy */
 }
 
 .text-slate-200 {
@@ -109,23 +109,115 @@ body {
 }
 
 .text-slate-300 {
-  color: #334155 !important; /* Slate-700 */
+  color: #1e293b !important; /* Slate-800 */
 }
 
 .text-slate-400 {
-  color: #475569 !important; /* Slate-600 */
+  color: #334155 !important; /* Slate-700 */
 }
 
 .text-slate-500 {
-  color: #64748b !important; /* Slate-500 */
+  color: #475569 !important; /* Slate-600 */
 }
 
 .text-white\/40 {
-  color: #475569 !important;
+  color: #64748b !important;
 }
 
 .text-white\/50 {
-  color: #334155 !important;
+  color: #475569 !important;
+}
+
+/* Gold/Amber Highlight overrides matching the Bihan logo */
+.text-lavender {
+  color: #d97706 !important; /* Amber-600 */
+}
+
+.bg-lavender {
+  background-color: rgba(245, 158, 11, var(--tw-bg-opacity, 1)) !important; /* Amber-500 */
+  color: #ffffff !important;
+}
+
+.hover\:bg-lavender:hover {
+  background-color: #d97706 !important; /* Amber-600 */
+  color: #ffffff !important;
+}
+
+.border-lavender {
+  border-color: rgba(245, 158, 11, var(--tw-border-opacity, 1)) !important;
+}
+
+.border-lavender\/20 {
+  border-color: rgba(245, 158, 11, 0.2) !important;
+}
+
+.border-lavender\/25 {
+  border-color: rgba(245, 158, 11, 0.25) !important;
+}
+
+.border-lavender\/30 {
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+.shadow-lavender\/5 {
+  box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.05) !important;
+}
+
+.shadow-lavender\/10 {
+  box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.1) !important;
+}
+
+/* Primary Color overrides (Purple to Amber) */
+.text-primary-400 {
+  color: #d97706 !important;
+}
+
+.bg-primary-500 {
+  background-color: rgba(245, 158, 11, var(--tw-bg-opacity, 1)) !important;
+  color: #ffffff !important;
+}
+
+.hover\:bg-primary-600:hover {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+}
+
+.border-primary-500\/20 {
+  border-color: rgba(245, 158, 11, 0.2) !important;
+}
+
+.shadow-primary-500\/5 {
+  box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.05) !important;
+}
+
+.shadow-primary-500\/15 {
+  box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.15) !important;
+}
+
+.shadow-primary-500\/20 {
+  box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.2) !important;
+}
+
+/* Gradient overrides on buttons to Amber/Gold */
+.bg-gradient-to-r.from-velvet\/85 {
+  background-image: linear-gradient(to right, #f59e0b, #d97706) !important;
+  color: #ffffff !important;
+}
+.bg-gradient-to-r.from-velvet\/85 * {
+  color: #ffffff !important;
+}
+
+.bg-gradient-to-r.from-velvet\/50 {
+  background-image: linear-gradient(to right, #f59e0b, #d97706) !important;
+  color: #ffffff !important;
+}
+.bg-gradient-to-r.from-velvet\/50 * {
+  color: #ffffff !important;
+}
+
+.bg-gradient-to-r.from-primary-500 {
+  background-image: linear-gradient(to right, #f59e0b, #d97706) !important;
+  color: #ffffff !important;
 }
 
 /* Borders adaptability */
@@ -155,7 +247,7 @@ body {
   transform: rotateY(-22deg) rotateX(12deg) rotateZ(-2deg);
   transform-style: preserve-3d;
   box-shadow: 
-    -5px 5px 15px rgba(0,0,0,0.8),
+    -5px 5px 15px rgba(15, 23, 42, 0.15),
     1px 1px 1px rgba(255,255,255,0.05) inset;
   transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -163,21 +255,21 @@ body {
 .book-mockup-hover:hover .book-mockup {
   transform: rotateY(-10deg) rotateX(5deg) rotateZ(0deg) scale(1.05);
   box-shadow: 
-    -15px 15px 35px rgba(211, 197, 246, 0.25),
-    0px 0px 20px rgba(211, 197, 246, 0.15);
+    -15px 15px 35px rgba(245, 158, 11, 0.15),
+    0px 0px 20px rgba(245, 158, 11, 0.1) !important;
 }
 
-/* Neon glow border utilities */
+/* Neon glow border utilities (Warm Amber Glow) */
 .glow-border-blue {
-  box-shadow: 0 0 15px rgba(211, 197, 246, 0.15);
-  border: 1px solid rgba(211, 197, 246, 0.2);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.15);
 }
 
 .glow-border-blue:hover {
-  box-shadow: 0 0 25px rgba(211, 197, 246, 0.3);
-  border-color: rgba(211, 197, 246, 0.5);
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.18);
+  border-color: rgba(245, 158, 11, 0.35);
 }
 
 .glow-text-blue {
-  text-shadow: 0 0 10px rgba(211, 197, 246, 0.5);
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
 }

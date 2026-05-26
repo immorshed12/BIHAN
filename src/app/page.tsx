@@ -584,7 +584,7 @@ export default function Home() {
               <h2 className="text-lg md:text-xl font-bold text-slate-300 tracking-wide">
                 Explore the Digital Frontier.
               </h2>
-              <h1 className="text-3xl lg:text-[44px] font-extrabold tracking-normal leading-[1.25] bg-gradient-to-r from-slate-100 via-slate-200 to-lavender bg-clip-text text-transparent font-serif">
+              <h1 className="text-3xl lg:text-[44px] font-extrabold tracking-normal leading-[1.25] bg-gradient-to-r from-slate-900 via-slate-800 to-amber-600 bg-clip-text text-transparent font-serif">
                 আপনার প্রয়োজনীয় সব প্রিমিয়াম পিডিএফ ও ডিজিটাল গাইড এক জায়গায়।
               </h1>
             </div>
@@ -688,7 +688,7 @@ export default function Home() {
                 <option
                   key={cat}
                   value={cat}
-                  className="bg-[#1a1130] text-slate-200 font-semibold"
+                  className="bg-white text-slate-800 font-semibold"
                 >
                   {cat === 'All' ? '📚 সব ক্যাটাগরি' : `• ${cat}`}
                 </option>
